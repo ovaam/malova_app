@@ -1,8 +1,22 @@
 //
 //  WelcomeInteractor.swift
-//  malova_app
+//  clinic
 //
-//  Created by Малова Олеся on 04.02.2025.
+//  Created by Малова Олеся on 24.01.2025.
 //
 
-import Foundation
+protocol WelcomeBusinessLogic {
+    func fetchGreeting()
+}
+
+class WelcomeInteractor: WelcomeBusinessLogic {
+    
+    var presenter: WelcomePresentationLogic?
+    
+    func fetchGreeting() {
+        // Логика получения данных. В нашем случае это простая заглушка.
+        let response = Welcome.Greeting.Response()
+        presenter?.presentGreeting(response: response)
+    }
+}
+
