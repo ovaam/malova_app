@@ -1,8 +1,35 @@
 //
 //  SingInRouter.swift
-//  malova_app
+//  clinic
 //
-//  Created by Малова Олеся on 04.02.2025.
+//  Created by Малова Олеся on 24.01.2025.
 //
+import UIKit
 
-import Foundation
+protocol SingInRoutingLogic {
+    func navigateToHome()
+    func navigateToRegistration()
+}
+
+protocol SingInDataPassing {
+    var dataStore: SingInDataStore? { get }
+}
+
+class SingInRouter: SingInRoutingLogic, SingInDataPassing {
+    
+    weak var viewController: UIViewController?
+    var dataStore: SingInDataStore?
+    
+    func navigateToHome() {
+        // Push to the home screen or next screen after successful login
+        //let mainVC = MainViewController()
+        //viewController?.navigationController?.pushViewController(homeVC, animated: true)
+    }
+    
+    func navigateToRegistration() {
+        // Navigate to registration screen
+        let loginVC = LogInViewController()
+        viewController?.navigationController?.pushViewController(loginVC, animated: true)
+    }
+}
+

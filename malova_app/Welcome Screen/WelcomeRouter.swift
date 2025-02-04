@@ -1,8 +1,22 @@
 //
 //  WelcomeRouter.swift
-//  malova_app
+//  clinic
 //
-//  Created by Малова Олеся on 04.02.2025.
+//  Created by Малова Олеся on 24.01.2025.
 //
+import UIKit
 
-import Foundation
+protocol WelcomeRoutingLogic {
+    func routeToNextScreen(currentVC: UIViewController)
+}
+
+class WelcomeRouter: UIViewController, WelcomeRoutingLogic {
+    
+    func routeToNextScreen(currentVC: UIViewController) {
+        let nextVC = SingInViewController()
+        navigationController?.pushViewController(nextVC, animated: true)
+        //navigationController?.pushViewController(vc, animated: true)
+        print("here it is")
+    }
+}
+

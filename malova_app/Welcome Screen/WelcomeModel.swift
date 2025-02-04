@@ -1,8 +1,18 @@
 //
-//  WelcomeModel.swift
-//  malova_app
+//  Model.swift
+//  clinic
 //
-//  Created by Малова Олеся on 04.02.2025.
+//  Created by Малова Олеся on 24.01.2025.
 //
 
-import Foundation
+enum Welcome {
+    struct Greeting {
+        struct Response {
+            // Данные для экрана приветствия
+        }
+        struct ViewModel {
+            // Презентация данных для экрана
+        }
+    }
+}
+

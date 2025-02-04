@@ -1,8 +1,18 @@
 //
 //  BackgroundPhoto.swift
-//  malova_app
+//  clinic
 //
-//  Created by Малова Олеся on 04.02.2025.
+//  Created by Малова Олеся on 31.01.2025.
 //
 
-import Foundation
+import UIKit
+
+extension UIView {
+    func setBackgroundPhoto(to view: UIView, image: UIImage) {
+        let backgroundImageView = UIImageView(frame: view.bounds)
+        backgroundImageView.image = image
+        backgroundImageView.contentMode = .scaleAspectFill
+        
+        view.addSubview(backgroundImageView)
+    }
+}

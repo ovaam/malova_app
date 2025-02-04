@@ -1,8 +1,17 @@
 //
 //  SingInModel.swift
-//  malova_app
+//  clinic
 //
-//  Created by Малова Олеся on 04.02.2025.
+//  Created by Малова Олеся on 24.01.2025.
 //
 
 import Foundation
+
+protocol SingInDataStore {
+    var username: String? { get set }
+}
+
+class SingInWorker {
+    // This can be used for network requests or other operations.
+}
+
