@@ -1,0 +1,606 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6CF418872D51BF6F00E9FA08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF418862D51BF6F00E9FA08 /* AppDelegate.swift */; };
+		6CF418892D51BF6F00E9FA08 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF418882D51BF6F00E9FA08 /* SceneDelegate.swift */; };
+		6CF4188B2D51BF6F00E9FA08 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF4188A2D51BF6F00E9FA08 /* ViewController.swift */; };
+		6CF4188E2D51BF6F00E9FA08 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CF4188C2D51BF6F00E9FA08 /* Main.storyboard */; };
+		6CF418902D51BF7100E9FA08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CF4188F2D51BF7100E9FA08 /* Assets.xcassets */; };
+		6CF418932D51BF7100E9FA08 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CF418912D51BF7100E9FA08 /* LaunchScreen.storyboard */; };
+		6CF4189E2D51BF7100E9FA08 /* malova_appTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF4189D2D51BF7100E9FA08 /* malova_appTests.swift */; };
+		6CF418A82D51BF7100E9FA08 /* malova_appUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF418A72D51BF7100E9FA08 /* malova_appUITests.swift */; };
+		6CF418AA2D51BF7100E9FA08 /* malova_appUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF418A92D51BF7100E9FA08 /* malova_appUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6CF4189A2D51BF7100E9FA08 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6CF4187B2D51BF6F00E9FA08 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6CF418822D51BF6F00E9FA08;
+			remoteInfo = malova_app;
+		};
+		6CF418A42D51BF7100E9FA08 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6CF4187B2D51BF6F00E9FA08 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6CF418822D51BF6F00E9FA08;
+			remoteInfo = malova_app;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		6CF418832D51BF6F00E9FA08 /* malova_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = malova_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CF418862D51BF6F00E9FA08 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6CF418882D51BF6F00E9FA08 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		6CF4188A2D51BF6F00E9FA08 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6CF4188D2D51BF6F00E9FA08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6CF4188F2D51BF7100E9FA08 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6CF418922D51BF7100E9FA08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6CF418942D51BF7100E9FA08 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6CF418992D51BF7100E9FA08 /* malova_appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = malova_appTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CF4189D2D51BF7100E9FA08 /* malova_appTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = malova_appTests.swift; sourceTree = "<group>"; };
+		6CF418A32D51BF7100E9FA08 /* malova_appUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = malova_appUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CF418A72D51BF7100E9FA08 /* malova_appUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = malova_appUITests.swift; sourceTree = "<group>"; };
+		6CF418A92D51BF7100E9FA08 /* malova_appUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = malova_appUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6CF418802D51BF6F00E9FA08 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6CF418962D51BF7100E9FA08 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6CF418A02D51BF7100E9FA08 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6CF4187A2D51BF6F00E9FA08 = {
+			isa = PBXGroup;
+			children = (
+				6CF418852D51BF6F00E9FA08 /* malova_app */,
+				6CF4189C2D51BF7100E9FA08 /* malova_appTests */,
+				6CF418A62D51BF7100E9FA08 /* malova_appUITests */,
+				6CF418842D51BF6F00E9FA08 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6CF418842D51BF6F00E9FA08 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6CF418832D51BF6F00E9FA08 /* malova_app.app */,
+				6CF418992D51BF7100E9FA08 /* malova_appTests.xctest */,
+				6CF418A32D51BF7100E9FA08 /* malova_appUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6CF418852D51BF6F00E9FA08 /* malova_app */ = {
+			isa = PBXGroup;
+			children = (
+				6CF418862D51BF6F00E9FA08 /* AppDelegate.swift */,
+				6CF418882D51BF6F00E9FA08 /* SceneDelegate.swift */,
+				6CF4188A2D51BF6F00E9FA08 /* ViewController.swift */,
+				6CF4188C2D51BF6F00E9FA08 /* Main.storyboard */,
+				6CF4188F2D51BF7100E9FA08 /* Assets.xcassets */,
+				6CF418912D51BF7100E9FA08 /* LaunchScreen.storyboard */,
+				6CF418942D51BF7100E9FA08 /* Info.plist */,
+			);
+			path = malova_app;
+			sourceTree = "<group>";
+		};
+		6CF4189C2D51BF7100E9FA08 /* malova_appTests */ = {
+			isa = PBXGroup;
+			children = (
+				6CF4189D2D51BF7100E9FA08 /* malova_appTests.swift */,
+			);
+			path = malova_appTests;
+			sourceTree = "<group>";
+		};
+		6CF418A62D51BF7100E9FA08 /* malova_appUITests */ = {
+			isa = PBXGroup;
+			children = (
+				6CF418A72D51BF7100E9FA08 /* malova_appUITests.swift */,
+				6CF418A92D51BF7100E9FA08 /* malova_appUITestsLaunchTests.swift */,
+			);
+			path = malova_appUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6CF418822D51BF6F00E9FA08 /* malova_app */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6CF418AD2D51BF7100E9FA08 /* Build configuration list for PBXNativeTarget "malova_app" */;
+			buildPhases = (
+				6CF4187F2D51BF6F00E9FA08 /* Sources */,
+				6CF418802D51BF6F00E9FA08 /* Frameworks */,
+				6CF418812D51BF6F00E9FA08 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = malova_app;
+			productName = malova_app;
+			productReference = 6CF418832D51BF6F00E9FA08 /* malova_app.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6CF418982D51BF7100E9FA08 /* malova_appTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6CF418B02D51BF7100E9FA08 /* Build configuration list for PBXNativeTarget "malova_appTests" */;
+			buildPhases = (
+				6CF418952D51BF7100E9FA08 /* Sources */,
+				6CF418962D51BF7100E9FA08 /* Frameworks */,
+				6CF418972D51BF7100E9FA08 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6CF4189B2D51BF7100E9FA08 /* PBXTargetDependency */,
+			);
+			name = malova_appTests;
+			productName = malova_appTests;
+			productReference = 6CF418992D51BF7100E9FA08 /* malova_appTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6CF418A22D51BF7100E9FA08 /* malova_appUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6CF418B32D51BF7100E9FA08 /* Build configuration list for PBXNativeTarget "malova_appUITests" */;
+			buildPhases = (
+				6CF4189F2D51BF7100E9FA08 /* Sources */,
+				6CF418A02D51BF7100E9FA08 /* Frameworks */,
+				6CF418A12D51BF7100E9FA08 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6CF418A52D51BF7100E9FA08 /* PBXTargetDependency */,
+			);
+			name = malova_appUITests;
+			productName = malova_appUITests;
+			productReference = 6CF418A32D51BF7100E9FA08 /* malova_appUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6CF4187B2D51BF6F00E9FA08 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					6CF418822D51BF6F00E9FA08 = {
+						CreatedOnToolsVersion = 15.0.1;
+					};
+					6CF418982D51BF7100E9FA08 = {
+						CreatedOnToolsVersion = 15.0.1;
+						TestTargetID = 6CF418822D51BF6F00E9FA08;
+					};
+					6CF418A22D51BF7100E9FA08 = {
+						CreatedOnToolsVersion = 15.0.1;
+						TestTargetID = 6CF418822D51BF6F00E9FA08;
+					};
+				};
+			};
+			buildConfigurationList = 6CF4187E2D51BF6F00E9FA08 /* Build configuration list for PBXProject "malova_app" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6CF4187A2D51BF6F00E9FA08;
+			productRefGroup = 6CF418842D51BF6F00E9FA08 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6CF418822D51BF6F00E9FA08 /* malova_app */,
+				6CF418982D51BF7100E9FA08 /* malova_appTests */,
+				6CF418A22D51BF7100E9FA08 /* malova_appUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6CF418812D51BF6F00E9FA08 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CF418932D51BF7100E9FA08 /* LaunchScreen.storyboard in Resources */,
+				6CF418902D51BF7100E9FA08 /* Assets.xcassets in Resources */,
+				6CF4188E2D51BF6F00E9FA08 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6CF418972D51BF7100E9FA08 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6CF418A12D51BF7100E9FA08 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6CF4187F2D51BF6F00E9FA08 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CF4188B2D51BF6F00E9FA08 /* ViewController.swift in Sources */,
+				6CF418872D51BF6F00E9FA08 /* AppDelegate.swift in Sources */,
+				6CF418892D51BF6F00E9FA08 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6CF418952D51BF7100E9FA08 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CF4189E2D51BF7100E9FA08 /* malova_appTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6CF4189F2D51BF7100E9FA08 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CF418AA2D51BF7100E9FA08 /* malova_appUITestsLaunchTests.swift in Sources */,
+				6CF418A82D51BF7100E9FA08 /* malova_appUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6CF4189B2D51BF7100E9FA08 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6CF418822D51BF6F00E9FA08 /* malova_app */;
+			targetProxy = 6CF4189A2D51BF7100E9FA08 /* PBXContainerItemProxy */;
+		};
+		6CF418A52D51BF7100E9FA08 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6CF418822D51BF6F00E9FA08 /* malova_app */;
+			targetProxy = 6CF418A42D51BF7100E9FA08 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		6CF4188C2D51BF6F00E9FA08 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6CF4188D2D51BF6F00E9FA08 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6CF418912D51BF7100E9FA08 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6CF418922D51BF7100E9FA08 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6CF418AB2D51BF7100E9FA08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6CF418AC2D51BF7100E9FA08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6CF418AE2D51BF7100E9FA08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = malova_app/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "me.malova-app";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6CF418AF2D51BF7100E9FA08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = malova_app/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "me.malova-app";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6CF418B12D51BF7100E9FA08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "me.malova-appTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/malova_app.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/malova_app";
+			};
+			name = Debug;
+		};
+		6CF418B22D51BF7100E9FA08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "me.malova-appTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/malova_app.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/malova_app";
+			};
+			name = Release;
+		};
+		6CF418B42D51BF7100E9FA08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "me.malova-appUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = malova_app;
+			};
+			name = Debug;
+		};
+		6CF418B52D51BF7100E9FA08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "me.malova-appUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = malova_app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6CF4187E2D51BF6F00E9FA08 /* Build configuration list for PBXProject "malova_app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6CF418AB2D51BF7100E9FA08 /* Debug */,
+				6CF418AC2D51BF7100E9FA08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6CF418AD2D51BF7100E9FA08 /* Build configuration list for PBXNativeTarget "malova_app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6CF418AE2D51BF7100E9FA08 /* Debug */,
+				6CF418AF2D51BF7100E9FA08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6CF418B02D51BF7100E9FA08 /* Build configuration list for PBXNativeTarget "malova_appTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6CF418B12D51BF7100E9FA08 /* Debug */,
+				6CF418B22D51BF7100E9FA08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6CF418B32D51BF7100E9FA08 /* Build configuration list for PBXNativeTarget "malova_appUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6CF418B42D51BF7100E9FA08 /* Debug */,
+				6CF418B52D51BF7100E9FA08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6CF4187B2D51BF6F00E9FA08 /* Project object */;
+}
