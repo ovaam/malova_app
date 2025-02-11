@@ -9,13 +9,12 @@ protocol WelcomePresentationLogic {
     func presentGreeting(response: Welcome.Greeting.Response)
 }
 
-class WelcomePresenter: WelcomePresentationLogic {
-
-    weak var viewController: WelcomeDisplayLogic?
+final class WelcomePresenter: WelcomePresentationLogic {
+    weak var view: WelcomeDisplayLogic?
     
     func presentGreeting(response: Welcome.Greeting.Response) {
         let viewModel = Welcome.Greeting.ViewModel()
-        viewController?.displayGreeting(viewModel: viewModel)
+        view?.displayGreeting(viewModel: viewModel)
     }
 }
 

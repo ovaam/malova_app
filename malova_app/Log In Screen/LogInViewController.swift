@@ -147,12 +147,6 @@ final class LogInViewController: UIViewController {
         agePicker.layer.cornerRadius = 10
         agePicker.isHidden = true
         
-        //view.addSubview(agePicker)
-        
-//        agePicker.pinTop(to: view.centerYAnchor, 80)
-//        agePicker.pinLeft(to: view.leadingAnchor, 80)
-//        agePicker.pinRight(to: view.trailingAnchor, 80)
-        
         agePicker.reloadAllComponents()
         
         

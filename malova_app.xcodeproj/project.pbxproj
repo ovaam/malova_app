@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6CBB62992D5B6CAA00712175 /* CustomFont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6CBB62982D5B6CAA00712175 /* CustomFont.ttf */; };
+		6CBB629A2D5B6CAA00712175 /* CustomFont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6CBB62982D5B6CAA00712175 /* CustomFont.ttf */; };
+		6CBB629B2D5B6CAA00712175 /* CustomFont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6CBB62982D5B6CAA00712175 /* CustomFont.ttf */; };
+		6CBB629D2D5B7EAB00712175 /* WelcomeAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBB629C2D5B7EAB00712175 /* WelcomeAssembly.swift */; };
+		6CBB629E2D5B7EAB00712175 /* WelcomeAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBB629C2D5B7EAB00712175 /* WelcomeAssembly.swift */; };
+		6CBB629F2D5B7EAB00712175 /* WelcomeAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBB629C2D5B7EAB00712175 /* WelcomeAssembly.swift */; };
 		6CF418872D51BF6F00E9FA08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF418862D51BF6F00E9FA08 /* AppDelegate.swift */; };
 		6CF418892D51BF6F00E9FA08 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF418882D51BF6F00E9FA08 /* SceneDelegate.swift */; };
 		6CF418902D51BF7100E9FA08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CF4188F2D51BF7100E9FA08 /* Assets.xcassets */; };
@@ -33,7 +39,6 @@
 		6CF4191C2D51C41A00E9FA08 /* LogInRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF4191B2D51C41A00E9FA08 /* LogInRouter.swift */; };
 		6CF4191E2D51C42100E9FA08 /* LogInModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF4191D2D51C42100E9FA08 /* LogInModel.swift */; };
 		6CF419212D51C44A00E9FA08 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF419202D51C44A00E9FA08 /* MainViewController.swift */; };
-		6CF419242D51C54C00E9FA08 /* CustomFont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6CF419232D51C54C00E9FA08 /* CustomFont.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +59,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6CBB62982D5B6CAA00712175 /* CustomFont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CustomFont.ttf; sourceTree = "<group>"; };
+		6CBB629C2D5B7EAB00712175 /* WelcomeAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeAssembly.swift; sourceTree = "<group>"; };
 		6CF418832D51BF6F00E9FA08 /* malova_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = malova_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CF418862D51BF6F00E9FA08 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6CF418882D51BF6F00E9FA08 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -84,7 +91,6 @@
 		6CF4191B2D51C41A00E9FA08 /* LogInRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInRouter.swift; sourceTree = "<group>"; };
 		6CF4191D2D51C42100E9FA08 /* LogInModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInModel.swift; sourceTree = "<group>"; };
 		6CF419202D51C44A00E9FA08 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		6CF419232D51C54C00E9FA08 /* CustomFont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = CustomFont.ttf; path = ../../../CustomFont.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +189,7 @@
 				6CF419032D51C26600E9FA08 /* WelcomePresenter.swift */,
 				6CF419052D51C2A600E9FA08 /* WelcomeRouter.swift */,
 				6CF419072D51C2DF00E9FA08 /* WelcomeModel.swift */,
+				6CBB629C2D5B7EAB00712175 /* WelcomeAssembly.swift */,
 			);
 			path = "Welcome Screen";
 			sourceTree = "<group>";
@@ -232,7 +239,7 @@
 		6CF419222D51C4FF00E9FA08 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				6CF419232D51C54C00E9FA08 /* CustomFont.ttf */,
+				6CBB62982D5B6CAA00712175 /* CustomFont.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -397,9 +404,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CBB62992D5B6CAA00712175 /* CustomFont.ttf in Resources */,
 				6CF418932D51BF7100E9FA08 /* LaunchScreen.storyboard in Resources */,
 				6CF418902D51BF7100E9FA08 /* Assets.xcassets in Resources */,
-				6CF419242D51C54C00E9FA08 /* CustomFont.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,6 +414,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CBB629A2D5B6CAA00712175 /* CustomFont.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,6 +422,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CBB629B2D5B6CAA00712175 /* CustomFont.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,6 +450,7 @@
 				6CF419002D51C22000E9FA08 /* BackgroundPhoto.swift in Sources */,
 				6CF4190F2D51C36800E9FA08 /* SingInPresenter.swift in Sources */,
 				6CF419112D51C38D00E9FA08 /* SingInRouter.swift in Sources */,
+				6CBB629D2D5B7EAB00712175 /* WelcomeAssembly.swift in Sources */,
 				6CF4191A2D51C40E00E9FA08 /* LogInPresenter.swift in Sources */,
 				6CF4191E2D51C42100E9FA08 /* LogInModel.swift in Sources */,
 				6CF4191C2D51C41A00E9FA08 /* LogInRouter.swift in Sources */,
@@ -453,6 +463,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CF4189E2D51BF7100E9FA08 /* malova_appTests.swift in Sources */,
+				6CBB629E2D5B7EAB00712175 /* WelcomeAssembly.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,6 +472,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CF418AA2D51BF7100E9FA08 /* malova_appUITestsLaunchTests.swift in Sources */,
+				6CBB629F2D5B7EAB00712175 /* WelcomeAssembly.swift in Sources */,
 				6CF418A82D51BF7100E9FA08 /* malova_appUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

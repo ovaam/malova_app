@@ -9,14 +9,17 @@ protocol WelcomeBusinessLogic {
     func fetchGreeting()
 }
 
-class WelcomeInteractor: WelcomeBusinessLogic {
+final class WelcomeInteractor: WelcomeBusinessLogic {
+    private let presenter: WelcomePresentationLogic
     
-    var presenter: WelcomePresentationLogic?
+    init(presenter: WelcomePresentationLogic) {
+        self.presenter = presenter
+    }
     
     func fetchGreeting() {
         // Логика получения данных. В нашем случае это простая заглушка.
         let response = Welcome.Greeting.Response()
-        presenter?.presentGreeting(response: response)
+        presenter.presentGreeting(response: response)
     }
 }
 

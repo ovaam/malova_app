@@ -7,16 +7,15 @@
 import UIKit
 
 protocol WelcomeRoutingLogic {
-    func routeToNextScreen(currentVC: UIViewController)
+    func routeToSingIn()
 }
 
-class WelcomeRouter: UIViewController, WelcomeRoutingLogic {
+final class WelcomeRouter: WelcomeRoutingLogic {
+    weak var view: UIViewController?
     
-    func routeToNextScreen(currentVC: UIViewController) {
+    func routeToSingIn() {
         let nextVC = SingInViewController()
-        navigationController?.pushViewController(nextVC, animated: true)
-        //navigationController?.pushViewController(vc, animated: true)
-        print("here it is")
+        view?.navigationController?.pushViewController(nextVC, animated: true)
     }
 }
 
