@@ -5,9 +5,33 @@
 //  Created by Малова Олеся on 02.02.2025.
 //
 
+
 import UIKit
 
-final class LogInViewController: UIViewController {
+protocol LogInDisplayLogic: AnyObject {
+    typealias Model = LogInModel
+    func displayStart(_ viewModel: Model.Start.ViewModel)
+    // func display(_ viewModel: Model..ViewModel)
+}
+
+protocol LogInAnalitics: AnyObject {
+    typealias Model = LogInModel
+    func logStart(_ info: Model.Start.Info)
+    // func log(_ viewModel: Model..Info)
+}
+
+
+final class LogInViewController: UIViewController,
+                                 LogInDisplayLogic {
+    // MARK: - Constants
+    private enum Constants {
+        static let fatalError: String = "init(coder:) has not been implemented"
+    }
+    
+    // MARK: - Fields
+    private let router: LogInRoutingLogic
+    private let interactor: LogInBusinessLogic
+    
     private let loginImage: UIImage = UIImage(named: "LogInImage") ?? UIImage()
     
     private let phoneTextField: UITextField = UITextField()
@@ -38,22 +62,35 @@ final class LogInViewController: UIViewController {
     
     private let loginButton: UIButton = UIButton()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.setBackgroundPhoto(to: view, image: loginImage)
-        setupUI()
+    // MARK: - LifeCycle
+    init(
+        router: LogInRoutingLogic,
+        interactor: LogInBusinessLogic
+    ) {
+        self.router = router
+        self.interactor = interactor
+        super.init(nibName: nil, bundle: nil)
     }
     
-    private func setupUI() {
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError(Constants.fatalError)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationController?.navigationBar.isHidden = true
+        interactor.loadStart(Model.Start.Request())
+        view.setBackgroundPhoto(to: view, image: loginImage)
         setupPhone()
         setupUsername()
         setupGenderButton()
-        setupAgePicker()
         setupPassword()
         setupRepeatedPassword()
         setupButton()
     }
     
+    // MARK: - Configuration
     private func setupPhone() {
         phoneLabel.text = "Номер телефона"
         
@@ -127,47 +164,6 @@ final class LogInViewController: UIViewController {
         else { selectedGender = "мужской"}
     }
     
-    private func setupAgePicker() {
-        ageLabel.text = "Возраст"
-        ageLabel.textColor = .black
-        
-        view.addSubview(ageLabel)
-        
-        ageLabel.pinLeft(to: view.leadingAnchor, 80)
-        ageLabel.pinTop(to: genderSwitcher.bottomAnchor, 20)
-        
-        agePicker.delegate = self
-        agePicker.dataSource = self
-        
-        ages = Array(0 ..< 100)
-        
-        agePicker.selectRow(18, inComponent: 0, animated: false)
-        
-        agePicker.backgroundColor = .white
-        agePicker.layer.cornerRadius = 10
-        agePicker.isHidden = true
-        
-        agePicker.reloadAllComponents()
-        
-        
-        openPickerButton.setTitle("выбрать", for: .normal)
-        openPickerButton.backgroundColor = .black
-        openPickerButton.tintColor = .white
-        openPickerButton.layer.cornerRadius = 10
-        
-        view.addSubview(openPickerButton)
-        
-        openPickerButton.pinRight(to: view.trailingAnchor, 80)
-        openPickerButton.pinTop(to: ageLabel.bottomAnchor, 10)
-        openPickerButton.pinLeft(to: ageLabel.trailingAnchor, 20)
-        
-        openPickerButton.addTarget(self, action: #selector(openPicker), for: .touchUpInside)
-        
-    }
-    
-    @objc private func openPicker() {
-        agePicker.isHidden = false
-    }
     
     private func setupPassword() {
         passwordLabel.text = "Пароль"
@@ -234,30 +230,13 @@ final class LogInViewController: UIViewController {
         loginButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
     
-    @objc func buttonTapped() {
-        let nextVC = MainViewController()
-        navigationController?.pushViewController(nextVC, animated: true)
+    // MARK: - Actions
+    @objc private func buttonTapped() {
+        router.routeToMain()
     }
-}
-
-extension LogInViewController: UIPickerViewDelegate {
     
-    private func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> Int? {
-        return ages[row]
-    }
+    // MARK: - DisplayLogic
+    func displayStart(_ viewModel: Model.Start.ViewModel) {
         
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedAge = ages[row]
-        //agePicker.isHidden = true
-    }
-}
-
-extension LogInViewController: UIPickerViewDataSource {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-        
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return ages.count
     }
 }

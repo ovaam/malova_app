@@ -14,7 +14,7 @@ final class WelcomeRouter: WelcomeRoutingLogic {
     weak var view: UIViewController?
     
     func routeToSingIn() {
-        let nextVC = SingInViewController()
+        let nextVC = SingInAssembly.build()
         view?.navigationController?.pushViewController(nextVC, animated: true)
     }
 }

@@ -60,6 +60,8 @@ class WelcomeViewController: UIViewController, WelcomeDisplayLogic {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.isHidden = true
+        
         setupUI()
         interactor?.fetchGreeting()
     }
@@ -119,11 +121,7 @@ class WelcomeViewController: UIViewController, WelcomeDisplayLogic {
     }
 
     @objc func startButtonTapped() {
-        //let nextVC = SingInViewController()
-        //navigationController?.pushViewController(nextVC, animated: true)
-        
         router?.routeToSingIn()
-        //print("button tapped")
     }
 
     func displayGreeting(viewModel: Welcome.Greeting.ViewModel) {

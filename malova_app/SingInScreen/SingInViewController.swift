@@ -5,23 +5,51 @@
 //  Created by Малова Олеся on 24.01.2025.
 //
 
-import UIKit
+//
+//    
+//    // MARK: - LoginDisplayLogic
+//    func displaySingInSuccess() {
+//        router?.navigateToHome()
+//    }
+//    
+//    func displaySingInFailure(error: String) {
+//        // Show an error message
+//        let alert = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
+//        alert.addAction(UIAlertAction(title: "OK", style: .default))
+//        present(alert, animated: true)
+//    }
+//    
+//    func navigateToRegistration() {
+//        router?.navigateToRegistration()
+//    }
+//}
 
 import UIKit
 
-// MARK: - View
 protocol SingInDisplayLogic: AnyObject {
-    func displaySingInSuccess()
-    func displaySingInFailure(error: String)
-    func navigateToRegistration()
+    typealias Model = SingInModel
+    func displayStart(_ viewModel: Model.Start.ViewModel)
+    // func display(_ viewModel: Model..ViewModel)
 }
 
-class SingInViewController: UIViewController, SingInDisplayLogic {
-    
-    var interactor: SingInBusinessLogic?
-    var router: SingInRoutingLogic?
+protocol SingInAnalitics: AnyObject {
+    typealias Model = SingInModel
+    func logStart(_ info: Model.Start.Info)
+    // func log(_ viewModel: Model..Info)
+}
 
-    // UI Elements
+
+final class SingInViewController: UIViewController,
+                            SingInDisplayLogic {
+    // MARK: - Constants
+    private enum Constants {
+        static let fatalError: String = "init(coder:) has not been implemented"
+    }
+    
+    // MARK: - Fields
+    private let router: SingInRoutingLogic
+    private let interactor: SingInBusinessLogic
+    
     private let usernameTextField: UITextField = UITextField()
     private let usernameLabel: UILabel = UILabel()
     private let usernameErrorLabel: UILabel = UILabel()
@@ -37,19 +65,33 @@ class SingInViewController: UIViewController, SingInDisplayLogic {
     
     private let singinImage: UIImage = UIImage(named: "SingInImage") ?? UIImage()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.setBackgroundPhoto(to: view, image: singinImage)
-        setupUI()
+    // MARK: - LifeCycle
+    init(
+        router: SingInRoutingLogic,
+        interactor: SingInBusinessLogic
+    ) {
+        self.router = router
+        self.interactor = interactor
+        super.init(nibName: nil, bundle: nil)
     }
     
-    private func setupUI() {
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError(Constants.fatalError)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationController?.navigationBar.isHidden = true
+        interactor.loadStart(Model.Start.Request())
+        view.setBackgroundPhoto(to: view, image: singinImage)
         setupUsername()
         setupPassword()
         setupSingInButton()
         setupRegisterButton()
     }
     
+    // MARK: - Configuration
     private func setupUsername() {
         usernameLabel.text = "Номер телефона"
         
@@ -74,7 +116,7 @@ class SingInViewController: UIViewController, SingInDisplayLogic {
         usernameErrorLabel.pinTop(to: usernameTextField.bottomAnchor, 10)
         usernameErrorLabel.pinRight(to: view.trailingAnchor, 80)
     }
-    
+   
     private func setupPassword() {
         passwordLabel.text = "Пароль"
         
@@ -99,7 +141,7 @@ class SingInViewController: UIViewController, SingInDisplayLogic {
         passwordErrorLabel.pinTop(to: passwordTextField.bottomAnchor, 10)
         passwordErrorLabel.pinRight(to: view.trailingAnchor, 80)
     }
-    
+   
     private func setupSingInButton() {
         singInButton.setTitle("Войти", for: .normal)
         singInButton.backgroundColor = .black
@@ -115,20 +157,14 @@ class SingInViewController: UIViewController, SingInDisplayLogic {
         
         singInButton.addTarget(self, action: #selector(singInButtonTapped), for: .touchUpInside)
     }
-
-    @objc private func singInButtonTapped() {
-        let username = usernameTextField.text ?? ""
-        let password = passwordTextField.text ?? ""
-        interactor?.login(username: username, password: password)
-    }
-    
+   
     private func setupRegisterButton() {
         //registerButton.setTitle("Нет аккаунта? Создать", for: .normal)
         
         let attribute: [NSAttributedString.Key: Any] = [
             .underlineStyle: NSUnderlineStyle.single.rawValue,
         ]
-                
+        
         registerButton.setAttributedTitle(NSAttributedString(string: "Нет аккаунта? Создать", attributes: attribute), for: .normal)
         registerButton.backgroundColor = .clear
         registerButton.tintColor = .black
@@ -142,26 +178,20 @@ class SingInViewController: UIViewController, SingInDisplayLogic {
         
     }
     
+    // MARK: - Actions
+    @objc private func singInButtonTapped() {
+        //let username = usernameTextField.text ?? ""
+        //let password = passwordTextField.text ?? ""
+        //interactor?.login(username: username, password: password)
+        router.routeToMain()
+    }
     @objc private func registerButtonTapped() {
-        let nextVC = LogInViewController()
-        navigationController?.pushViewController(nextVC, animated: true)
-        //router?.navigateToRegistration()
+        router.routeToRegistration()
     }
     
-    // MARK: - LoginDisplayLogic
-    func displaySingInSuccess() {
-        router?.navigateToHome()
-    }
-    
-    func displaySingInFailure(error: String) {
-        // Show an error message
-        let alert = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
-    
-    func navigateToRegistration() {
-        router?.navigateToRegistration()
+    // MARK: - DisplayLogic
+    func displayStart(_ viewModel: Model.Start.ViewModel) {
+        
     }
 }
 
