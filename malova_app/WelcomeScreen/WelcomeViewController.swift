@@ -61,6 +61,7 @@ class WelcomeViewController: UIViewController, WelcomeDisplayLogic {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = true
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         
         setupUI()
         interactor?.fetchGreeting()

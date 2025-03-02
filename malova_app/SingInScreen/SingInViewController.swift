@@ -5,25 +5,6 @@
 //  Created by Малова Олеся on 24.01.2025.
 //
 
-//
-//    
-//    // MARK: - LoginDisplayLogic
-//    func displaySingInSuccess() {
-//        router?.navigateToHome()
-//    }
-//    
-//    func displaySingInFailure(error: String) {
-//        // Show an error message
-//        let alert = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "OK", style: .default))
-//        present(alert, animated: true)
-//    }
-//    
-//    func navigateToRegistration() {
-//        router?.navigateToRegistration()
-//    }
-//}
-
 import UIKit
 
 protocol SingInDisplayLogic: AnyObject {
@@ -82,7 +63,7 @@ final class SingInViewController: UIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.isHidden = true
+        //self.navigationController?.navigationBar.isHidden = true
         interactor.loadStart(Model.Start.Request())
         view.setBackgroundPhoto(to: view, image: singinImage)
         setupUsername()

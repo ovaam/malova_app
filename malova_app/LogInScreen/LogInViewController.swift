@@ -79,9 +79,9 @@ final class LogInViewController: UIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.isHidden = true
         interactor.loadStart(Model.Start.Request())
         view.setBackgroundPhoto(to: view, image: loginImage)
+        
         setupPhone()
         setupUsername()
         setupGenderButton()
@@ -171,7 +171,7 @@ final class LogInViewController: UIViewController,
         view.addSubview(passwordLabel)
         
         passwordLabel.pinLeft(to: view.leadingAnchor, 80)
-        passwordLabel.pinTop(to: openPickerButton.bottomAnchor, 20)
+        passwordLabel.pinTop(to: genderSwitcher.bottomAnchor, 20)
         passwordLabel.pinRight(to: view.trailingAnchor, 80)
         
         passwordTextField.placeholder = "введите"

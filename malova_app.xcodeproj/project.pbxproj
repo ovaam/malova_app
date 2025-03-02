@@ -24,6 +24,15 @@
 		6C3305612D712BA9009D0098 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3305602D712BA9009D0098 /* SettingsModel.swift */; };
 		6C3305632D712BC6009D0098 /* SettingsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3305622D712BC6009D0098 /* SettingsRouter.swift */; };
 		6C3305652D712BD1009D0098 /* SettingsAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3305642D712BD1009D0098 /* SettingsAssembly.swift */; };
+		6C3305A92D74EE7D009D0098 /* ProceduresViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3305A82D74EE7D009D0098 /* ProceduresViewController.swift */; };
+		6C3305AB2D74EE90009D0098 /* ProceduresPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3305AA2D74EE90009D0098 /* ProceduresPresenter.swift */; };
+		6C3305AD2D74EE99009D0098 /* ProceduresInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3305AC2D74EE99009D0098 /* ProceduresInteractor.swift */; };
+		6C3305AF2D74EEA6009D0098 /* ProceduresModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3305AE2D74EEA6009D0098 /* ProceduresModel.swift */; };
+		6C3305B12D74EEB3009D0098 /* ProceduresRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3305B02D74EEB3009D0098 /* ProceduresRouter.swift */; };
+		6C3305B32D74EEBD009D0098 /* ProceduresAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3305B22D74EEBD009D0098 /* ProceduresAssembly.swift */; };
+		6C3305B52D74F179009D0098 /* procedures.json in Resources */ = {isa = PBXBuildFile; fileRef = 6C3305B42D74F179009D0098 /* procedures.json */; };
+		6C3305B62D74F179009D0098 /* procedures.json in Resources */ = {isa = PBXBuildFile; fileRef = 6C3305B42D74F179009D0098 /* procedures.json */; };
+		6C3305B72D74F179009D0098 /* procedures.json in Resources */ = {isa = PBXBuildFile; fileRef = 6C3305B42D74F179009D0098 /* procedures.json */; };
 		6CBB62992D5B6CAA00712175 /* CustomFont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6CBB62982D5B6CAA00712175 /* CustomFont.ttf */; };
 		6CBB629A2D5B6CAA00712175 /* CustomFont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6CBB62982D5B6CAA00712175 /* CustomFont.ttf */; };
 		6CBB629B2D5B6CAA00712175 /* CustomFont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6CBB62982D5B6CAA00712175 /* CustomFont.ttf */; };
@@ -95,6 +104,13 @@
 		6C3305602D712BA9009D0098 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		6C3305622D712BC6009D0098 /* SettingsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRouter.swift; sourceTree = "<group>"; };
 		6C3305642D712BD1009D0098 /* SettingsAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAssembly.swift; sourceTree = "<group>"; };
+		6C3305A82D74EE7D009D0098 /* ProceduresViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProceduresViewController.swift; sourceTree = "<group>"; };
+		6C3305AA2D74EE90009D0098 /* ProceduresPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProceduresPresenter.swift; sourceTree = "<group>"; };
+		6C3305AC2D74EE99009D0098 /* ProceduresInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProceduresInteractor.swift; sourceTree = "<group>"; };
+		6C3305AE2D74EEA6009D0098 /* ProceduresModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProceduresModel.swift; sourceTree = "<group>"; };
+		6C3305B02D74EEB3009D0098 /* ProceduresRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProceduresRouter.swift; sourceTree = "<group>"; };
+		6C3305B22D74EEBD009D0098 /* ProceduresAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProceduresAssembly.swift; sourceTree = "<group>"; };
+		6C3305B42D74F179009D0098 /* procedures.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = procedures.json; sourceTree = "<group>"; };
 		6CBB62982D5B6CAA00712175 /* CustomFont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CustomFont.ttf; sourceTree = "<group>"; };
 		6CBB629C2D5B7EAB00712175 /* WelcomeAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeAssembly.swift; sourceTree = "<group>"; };
 		6CCA14AC2D69FBAA00C37E53 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -245,6 +261,7 @@
 				6CF418FB2D51C1CA00E9FA08 /* UIView+Pin.swift */,
 				6CF418FD2D51C20B00E9FA08 /* HEX.swift */,
 				6CF418FF2D51C22000E9FA08 /* BackgroundPhoto.swift */,
+				6C3305B42D74F179009D0098 /* procedures.json */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -252,8 +269,8 @@
 		6CF419092D51C31900E9FA08 /* SingInScreen */ = {
 			isa = PBXGroup;
 			children = (
-				6CF4190C2D51C34C00E9FA08 /* SingInInteractor.swift */,
 				6CF4190A2D51C33700E9FA08 /* SingInViewController.swift */,
+				6CF4190C2D51C34C00E9FA08 /* SingInInteractor.swift */,
 				6CF4190E2D51C36800E9FA08 /* SingInPresenter.swift */,
 				6CF419102D51C38D00E9FA08 /* SingInRouter.swift */,
 				6CF419122D51C39F00E9FA08 /* SingInModel.swift */,
@@ -339,6 +356,12 @@
 		6CF4192A2D527D4B00E9FA08 /* Procedures Screen */ = {
 			isa = PBXGroup;
 			children = (
+				6C3305A82D74EE7D009D0098 /* ProceduresViewController.swift */,
+				6C3305AA2D74EE90009D0098 /* ProceduresPresenter.swift */,
+				6C3305AC2D74EE99009D0098 /* ProceduresInteractor.swift */,
+				6C3305AE2D74EEA6009D0098 /* ProceduresModel.swift */,
+				6C3305B02D74EEB3009D0098 /* ProceduresRouter.swift */,
+				6C3305B22D74EEBD009D0098 /* ProceduresAssembly.swift */,
 			);
 			path = "Procedures Screen";
 			sourceTree = "<group>";
@@ -464,6 +487,7 @@
 				6CBB62992D5B6CAA00712175 /* CustomFont.ttf in Resources */,
 				6CF418932D51BF7100E9FA08 /* LaunchScreen.storyboard in Resources */,
 				6CF418902D51BF7100E9FA08 /* Assets.xcassets in Resources */,
+				6C3305B52D74F179009D0098 /* procedures.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,6 +496,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CBB629A2D5B6CAA00712175 /* CustomFont.ttf in Resources */,
+				6C3305B62D74F179009D0098 /* procedures.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,6 +505,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CBB629B2D5B6CAA00712175 /* CustomFont.ttf in Resources */,
+				6C3305B72D74F179009D0098 /* procedures.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,6 +522,7 @@
 				6CF419212D51C44A00E9FA08 /* MainViewController.swift in Sources */,
 				6CF418FC2D51C1CA00E9FA08 /* UIView+Pin.swift in Sources */,
 				6CF419042D51C26600E9FA08 /* WelcomePresenter.swift in Sources */,
+				6C3305B12D74EEB3009D0098 /* ProceduresRouter.swift in Sources */,
 				6C3305482D711D28009D0098 /* MainPresenter.swift in Sources */,
 				6CF419022D51C24700E9FA08 /* WelcomeInteractor.swift in Sources */,
 				6CF419162D51C3E600E9FA08 /* LogInViewController.swift in Sources */,
@@ -508,8 +535,11 @@
 				6CCA14AF2D69FD5B00C37E53 /* SingInAssembly.swift in Sources */,
 				6C33054E2D711E2B009D0098 /* MainAssembly.swift in Sources */,
 				6CF419132D51C39F00E9FA08 /* SingInModel.swift in Sources */,
+				6C3305B32D74EEBD009D0098 /* ProceduresAssembly.swift in Sources */,
 				6C33055D2D712B90009D0098 /* SettingsPresenter.swift in Sources */,
 				6CF4190D2D51C34C00E9FA08 /* SingInInteractor.swift in Sources */,
+				6C3305AD2D74EE99009D0098 /* ProceduresInteractor.swift in Sources */,
+				6C3305A92D74EE7D009D0098 /* ProceduresViewController.swift in Sources */,
 				6C33054C2D711E1A009D0098 /* MainModel.swift in Sources */,
 				6CF419182D51C40400E9FA08 /* LogInInteractor.swift in Sources */,
 				6CF419082D51C2DF00E9FA08 /* WelcomeModel.swift in Sources */,
@@ -521,12 +551,14 @@
 				6CF419002D51C22000E9FA08 /* BackgroundPhoto.swift in Sources */,
 				6C33055F2D712B9E009D0098 /* SettingsInteractor.swift in Sources */,
 				6CCA14AD2D69FBAA00C37E53 /* ProfileViewController.swift in Sources */,
+				6C3305AB2D74EE90009D0098 /* ProceduresPresenter.swift in Sources */,
 				6CF4190F2D51C36800E9FA08 /* SingInPresenter.swift in Sources */,
 				6CF419112D51C38D00E9FA08 /* SingInRouter.swift in Sources */,
 				6CBB629D2D5B7EAB00712175 /* WelcomeAssembly.swift in Sources */,
 				6CF4191A2D51C40E00E9FA08 /* LogInPresenter.swift in Sources */,
 				6CF4191E2D51C42100E9FA08 /* LogInModel.swift in Sources */,
 				6CF4191C2D51C41A00E9FA08 /* LogInRouter.swift in Sources */,
+				6C3305AF2D74EEA6009D0098 /* ProceduresModel.swift in Sources */,
 				6CF418892D51BF6F00E9FA08 /* SceneDelegate.swift in Sources */,
 				6C3305462D711D05009D0098 /* MainInteractor.swift in Sources */,
 				6C3305652D712BD1009D0098 /* SettingsAssembly.swift in Sources */,

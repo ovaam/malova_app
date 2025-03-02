@@ -24,7 +24,8 @@ final class MainRouter: MainRoutingLogic {
     }
     
     func routeToProcedures() {
-        
+        let nextVC = ProceduresAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     func routeToAppointment() {

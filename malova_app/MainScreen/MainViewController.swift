@@ -19,7 +19,7 @@ protocol MainAnalitics: AnyObject {
     // func log(_ viewModel: Model..Info)
 }
 
-
+// TODO: изменить бэкграунд фото, чтобы лучше было качество может найти замену,убрать свапанье экранов
 final class MainViewController: UIViewController,
                             MainDisplayLogic {
     // MARK: - Constants
@@ -74,6 +74,7 @@ final class MainViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         interactor.loadStart(Model.Start.Request())
+        
         view.setBackgroundPhoto(to: view, image: mainImage)
         setAppointmentButton()
         setupScanButton()
@@ -131,7 +132,7 @@ final class MainViewController: UIViewController,
     
     // MARK: - Actions
     @objc func appointmentButtonTapped() {
-        // go to other screen
+        // go to
     }
     
     @objc func scanButtonTapped() {
@@ -139,7 +140,7 @@ final class MainViewController: UIViewController,
     }
     
     @objc func procedureButtonTapped() {
-        // go to other screen
+        router.routeToProcedures()
     }
     
     // MARK: - DisplayLogic
