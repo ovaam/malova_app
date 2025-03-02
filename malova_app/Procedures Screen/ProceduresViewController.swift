@@ -56,7 +56,7 @@ final class ProceduresViewController: UIViewController,
         super.viewDidLoad()
         interactor.loadStart(Model.Start.Request())
         
-        view.backgroundColor = UIColor(hex: "D1F3E3")
+        view.backgroundColor = UIColor(hex: "EAEAEA")
         // Загрузка данных
         categories = loadProcedures()
         
@@ -99,7 +99,7 @@ final class ProceduresViewController: UIViewController,
         
         // Добавляем таблицу в иерархию представлений
         view.addSubview(tableView)
-        tableView.backgroundColor = UIColor(hex: "D1F3E3")
+        tableView.backgroundColor = UIColor(hex: "EAEAEA")
         
 //        tableView.pinTop(to: view.topAnchor, 250)
 //        tableView.pinLeft(to: view.leadingAnchor)
@@ -182,7 +182,7 @@ extension ProceduresViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         if let procedure = categories?[indexPath.section].procedures[indexPath.row] {
             cell.textLabel?.text = procedure.name
-            cell.backgroundColor = UIColor(hex: "D1F3E3")
+            cell.backgroundColor = UIColor(hex: "EAEAEA")
             cell.textLabel?.textColor = UIColor(hex: "313638")
             cell.textLabel?.font = UIFont(name: "HelveticaNeue-Medium", size: 16)
             cell.textLabel?.textAlignment = .center
@@ -195,7 +195,7 @@ extension ProceduresViewController: UITableViewDelegate {
     // Кастомный заголовок секции
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
-        headerView.backgroundColor = UIColor(hex: "D1F3E3")
+        headerView.backgroundColor = UIColor(hex: "EAEAEA")
         
         let label = UILabel()
         label.text = categories?[section].type
@@ -271,7 +271,7 @@ class DetailAboutProcedureViewController: UIViewController {
     }
     
     private func setupContainerView() {
-        containerView.backgroundColor = UIColor(hex: "63917B")
+        containerView.backgroundColor = UIColor(hex: "647269")
         containerView.layer.cornerRadius = 12
         containerView.layer.masksToBounds = true
         
