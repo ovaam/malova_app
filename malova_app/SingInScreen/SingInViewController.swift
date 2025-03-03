@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseFirestore
 
 protocol SingInDisplayLogic: AnyObject {
     typealias Model = SingInModel
@@ -31,9 +33,9 @@ final class SingInViewController: UIViewController,
     private let router: SingInRoutingLogic
     private let interactor: SingInBusinessLogic
     
-    private let usernameTextField: UITextField = UITextField()
-    private let usernameLabel: UILabel = UILabel()
-    private let usernameErrorLabel: UILabel = UILabel()
+    private let emailTextField: UITextField = UITextField()
+    private let emailLabel: UILabel = UILabel()
+    private let emailErrorLabel: UILabel = UILabel()
     
     
     private let passwordTextField: UITextField = UITextField()
@@ -66,36 +68,36 @@ final class SingInViewController: UIViewController,
         //self.navigationController?.navigationBar.isHidden = true
         interactor.loadStart(Model.Start.Request())
         view.setBackgroundPhoto(to: view, image: singinImage)
-        setupUsername()
+        setupEmail()
         setupPassword()
         setupSingInButton()
         setupRegisterButton()
     }
     
     // MARK: - Configuration
-    private func setupUsername() {
-        usernameLabel.text = "Номер телефона"
+    private func setupEmail() {
+        emailLabel.text = "Электронная почта"
         
-        view.addSubview(usernameLabel)
+        view.addSubview(emailLabel)
         
-        usernameLabel.pinLeft(to: view.leadingAnchor, 80)
-        usernameLabel.pinTop(to: view.topAnchor, 375)
-        usernameLabel.pinRight(to: view.trailingAnchor, 80)
+        emailLabel.pinLeft(to: view.leadingAnchor, 80)
+        emailLabel.pinTop(to: view.topAnchor, 375)
+        emailLabel.pinRight(to: view.trailingAnchor, 80)
         
-        usernameTextField.placeholder = "Введите"
-        usernameTextField.borderStyle = .roundedRect
+        emailTextField.placeholder = "Введите"
+        emailTextField.borderStyle = .roundedRect
         
-        view.addSubview(usernameTextField)
+        view.addSubview(emailTextField)
         
-        usernameTextField.pinLeft(to: view.leadingAnchor, 80)
-        usernameTextField.pinTop(to: usernameLabel.bottomAnchor, 10)
-        usernameTextField.pinRight(to: view.trailingAnchor, 80)
+        emailTextField.pinLeft(to: view.leadingAnchor, 80)
+        emailTextField.pinTop(to: emailLabel.bottomAnchor, 10)
+        emailTextField.pinRight(to: view.trailingAnchor, 80)
         
-        view.addSubview(usernameErrorLabel)
+        view.addSubview(emailErrorLabel)
         
-        usernameErrorLabel.pinLeft(to: view.leadingAnchor, 80)
-        usernameErrorLabel.pinTop(to: usernameTextField.bottomAnchor, 10)
-        usernameErrorLabel.pinRight(to: view.trailingAnchor, 80)
+        emailErrorLabel.pinLeft(to: view.leadingAnchor, 80)
+        emailErrorLabel.pinTop(to: emailTextField.bottomAnchor, 10)
+        emailErrorLabel.pinRight(to: view.trailingAnchor, 80)
     }
    
     private func setupPassword() {
@@ -104,7 +106,7 @@ final class SingInViewController: UIViewController,
         view.addSubview(passwordLabel)
         
         passwordLabel.pinLeft(to: view.leadingAnchor, 80)
-        passwordLabel.pinTop(to: usernameErrorLabel.bottomAnchor, 20)
+        passwordLabel.pinTop(to: emailErrorLabel.bottomAnchor, 20)
         passwordLabel.pinRight(to: view.trailingAnchor, 80)
         
         passwordTextField.placeholder = "Введите"
@@ -159,13 +161,60 @@ final class SingInViewController: UIViewController,
         
     }
     
+    private func loginUser(email: String, password: String, completion: @escaping (Bool, String?) -> Void) {
+        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+            if let error = error {
+                completion(false, error.localizedDescription)
+                return
+            }
+            
+            guard let user = authResult?.user else {
+                completion(false, "Ошибка: пользователь не найден")
+                return
+            }
+            let uid = user.uid
+            
+            let db = Firestore.firestore()
+            db.collection("users").document(uid).getDocument { document, error in
+                if let error = error {
+                    completion(false, error.localizedDescription)
+                    return
+                }
+                
+                if let document = document, document.exists {
+                    let data = document.data()
+                    print("Данные пользователя: \(data ?? [:])")
+                    completion(true, nil)
+                } else {
+                    completion(false, "Данные пользователя не найдены")
+                }
+            }
+        }
+    }
+    
+    private func showError(message: String) {
+        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     // MARK: - Actions
     @objc private func singInButtonTapped() {
-        //let username = usernameTextField.text ?? ""
-        //let password = passwordTextField.text ?? ""
-        //interactor?.login(username: username, password: password)
-        router.routeToMain()
+        guard let email = emailTextField.text, !email.isEmpty,
+              let password = passwordTextField.text, !password.isEmpty else {
+            showError(message: "Пожалуйста, заполните все поля.")
+            return
+        }
+        
+        loginUser(email: email, password: password) { success, errorMessage in
+            if success {
+                self.router.routeToMain()
+            } else {
+                self.showError(message: errorMessage ?? "Ошибка аутентификации.")
+            }
+        }
     }
+    
     @objc private func registerButtonTapped() {
         router.routeToRegistration()
     }

@@ -20,6 +20,8 @@ protocol ProceduresAnalitics: AnyObject {
 }
 
 
+// TODO: make a button that will save name of procedure and give it to appointment chat screen, so we wont need to do an another one screen like this one
+
 final class ProceduresViewController: UIViewController,
                                       ProceduresDisplayLogic {
     // MARK: - Constants
