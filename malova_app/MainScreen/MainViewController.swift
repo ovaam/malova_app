@@ -42,7 +42,6 @@ final class MainViewController: UIViewController,
         static let procedureButtonTop: Double = 400
         static let procedureButtonRight: Double = 100
         
-        
         static let buttonWight: Double = 450
         static let buttonHeight: Double = 50
         static let buttonCornerRadius: Double = 20
@@ -55,6 +54,7 @@ final class MainViewController: UIViewController,
     private let appointmentButton: UIButton = UIButton()
     private let scanButton: UIButton = UIButton()
     private let procedureButton: UIButton = UIButton()
+    private let profileButton: UIButton = UIButton()
     
     // MARK: - LifeCycle
     init(
@@ -79,6 +79,7 @@ final class MainViewController: UIViewController,
         setAppointmentButton()
         setupScanButton()
         setupProcedureButton()
+        setupProfileButton()
     }
     
     // MARK: - Configuration
@@ -130,6 +131,32 @@ final class MainViewController: UIViewController,
         procedureButton.addTarget(self, action: #selector(procedureButtonTapped), for: .touchUpInside)
     }
     
+    private func setupProfileButton() {
+        profileButton.setImage(UIImage(named: "avatar"), for: .normal) // Иконка профиля
+        //profileButton.tintColor = UIColor(hex: "647269") // Цвет иконки
+        profileButton.backgroundColor = UIColor(hex: "647269")
+        profileButton.addTarget(self, action: #selector(openProfile), for: .touchUpInside)
+        
+        // Добавление кнопки на экран
+        view.addSubview(profileButton)
+        profileButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Констрейнты для размещения в правом верхнем углу
+        NSLayoutConstraint.activate([
+            profileButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            profileButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            //profileButton.widthAnchor.constraint(equalToConstant: 100), // Ширина кнопки
+            //profileButton.heightAnchor.constraint(equalToConstant: 100) // Высота кнопки
+        ])
+        
+        profileButton.setHeight(60)
+        profileButton.setWidth(60)
+        
+        // Делаем кнопку квадратной
+        profileButton.layer.cornerRadius = 20 // Закругление углов
+        profileButton.layer.masksToBounds = true
+    }
+    
     // MARK: - Actions
     @objc func appointmentButtonTapped() {
         router.routeToAppointment()
@@ -141,6 +168,10 @@ final class MainViewController: UIViewController,
     
     @objc func procedureButtonTapped() {
         router.routeToProcedures()
+    }
+    
+    @objc private func openProfile() {
+        router.routeToProfile()
     }
     
     // MARK: - DisplayLogic

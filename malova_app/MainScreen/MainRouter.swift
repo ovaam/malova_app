@@ -20,7 +20,8 @@ final class MainRouter: MainRoutingLogic {
     weak var view: UIViewController?
     
     func routeToProfile() {
-        
+        let nextVC = ProfileAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     func routeToProcedures() {

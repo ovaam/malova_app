@@ -10,6 +10,7 @@ import UIKit
 protocol ProfileRoutingLogic {
     func routeToSettings()
     func routeToMain()
+    func routeToAdminChatList()
 }
 
 final class ProfileRouter: ProfileRoutingLogic {
@@ -21,6 +22,11 @@ final class ProfileRouter: ProfileRoutingLogic {
     
     func routeToMain() {
         let nextVC = MainAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    func routeToAdminChatList() {
+        let nextVC = AdminChatListAssembly.build()
         view?.navigationController?.pushViewController(nextVC, animated: true)
     }
 }
