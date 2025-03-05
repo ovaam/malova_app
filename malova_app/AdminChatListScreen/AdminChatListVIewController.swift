@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseFirestore
+import FirebaseAuth
 
 protocol AdminChatListDisplayLogic: AnyObject {
     typealias Model = AdminChatListModel
@@ -31,6 +33,17 @@ final class AdminChatListViewController: UIViewController,
     private let router: AdminChatListRoutingLogic
     private let interactor: AdminChatListBusinessLogic
     
+    private let db = Firestore.firestore()
+        private var chats: [Chat] = []
+
+    // MARK: - UI Elements
+    private let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        return tableView
+    }()
+
+    
     // MARK: - LifeCycle
     init(
         router: AdminChatListRoutingLogic,
@@ -49,6 +62,8 @@ final class AdminChatListViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         interactor.loadStart(Model.Start.Request())
+        setupUI()
+        loadChats()
     }
     
     // MARK: - Configuration
@@ -77,19 +92,50 @@ final class AdminChatListViewController: UIViewController,
                 return
             }
             
-            self.chats = snapshot?.documents.compactMap { document in
-                let chatId = document.documentID
-                return Chat(chatId: chatId)
-            } ?? []
+            guard let documents = snapshot?.documents else { return }
             
-            self.tableView.reloadData()
+            // Загружаем чаты и ФИО пользователей
+            self.chats.removeAll()
+            let dispatchGroup = DispatchGroup()
+            
+            for document in documents {
+                let chatId = document.documentID
+                let userId = chatId.components(separatedBy: "_").first ?? "" // Извлекаем userId из chatId
+                
+                dispatchGroup.enter()
+                
+                // Загружаем ФИО пользователя из коллекции users
+                self.db.collection("users").document(userId).getDocument { userSnapshot, userError in
+                    if let userError = userError {
+                        print("Ошибка загрузки пользователя: \(userError.localizedDescription)")
+                        dispatchGroup.leave()
+                        return
+                    }
+                    
+                    guard let userData = userSnapshot?.data(),
+                          let fullName = userData["fullName"] as? String else {
+                        print("Ошибка: поле fullName отсутствует у пользователя \(userId)")
+                        dispatchGroup.leave()
+                        return
+                    }
+                    
+                    // Создаем объект чата с ФИО пользователя
+                    let chat = Chat(chatId: chatId, userId: userId, userFullName: fullName)
+                    self.chats.append(chat)
+                    dispatchGroup.leave()
+                }
+            }
+            
+            // Обновляем таблицу после загрузки всех данных
+            dispatchGroup.notify(queue: .main) {
+                self.tableView.reloadData()
+            }
         }
     }
 
         // MARK: - Open Chat
     private func openChat(chatId: String) {
-        let chatVC = AdminChatAssembly.build()
-        //chatVC.chatId = chatId
+        let chatVC = AdminChatAssembly.build(chatId: chatId)
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
@@ -102,6 +148,24 @@ final class AdminChatListViewController: UIViewController,
     // MARK: - DisplayLogic
     func displayStart(_ viewModel: Model.Start.ViewModel) {
         
+    }
+}
+
+extension AdminChatListViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return chats.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let chat = chats[indexPath.row]
+        cell.textLabel?.text = chat.userFullName // Отображаем ФИО пользователя
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let chat = chats[indexPath.row]
+        openChat(chatId: chat.chatId)
     }
 }
 

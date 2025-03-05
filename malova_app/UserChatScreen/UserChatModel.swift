@@ -6,7 +6,7 @@
 //
 import UIKit
 
-enum ChatModel {
+enum UserChatModel {
     enum Start {
         struct Request { }
         struct Response { }
@@ -20,4 +20,11 @@ enum ChatModel {
     //        struct ViewModel { }
     //        struct Info { }
     //    }
+}
+
+// MARK: - Message Model
+struct Message {
+    let senderId: String
+    let text: String
+    let timestamp: Date
 }

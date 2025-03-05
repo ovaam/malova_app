@@ -5,4 +5,16 @@
 //  Created by Малова Олеся on 05.03.2025.
 //
 
-import Foundation
+import UIKit
+
+protocol AdminChatListRoutingLogic {
+    func routeTo()
+}
+
+final class AdminChatListRouter: AdminChatListRoutingLogic {
+    weak var view: UIViewController?
+    
+    func routeTo() {
+        
+    }
+}

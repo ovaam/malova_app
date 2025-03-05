@@ -7,14 +7,15 @@
 
 import UIKit
 
-protocol ChatRoutingLogic {
-    func routeTo()
+protocol UserChatRoutingLogic {
+    func routeToMain()
 }
 
-final class ChatRouter: ChatRoutingLogic {
+final class UserChatRouter: UserChatRoutingLogic {
     weak var view: UIViewController?
     
-    func routeTo() {
-        
+    func routeToMain() {
+        let nextVC = MainAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
     }
 }

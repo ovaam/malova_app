@@ -7,19 +7,19 @@
 
 import UIKit
 
-protocol ChatBusinessLogic {
-    typealias Model = ChatModel
+protocol UserChatBusinessLogic {
+    typealias Model = UserChatModel
     func loadStart(_ request: Model.Start.Request)
     // func load(_ request: Model..Request)
 }
 
 
-final class ChatInteractor: ChatBusinessLogic {
+final class UserChatInteractor: UserChatBusinessLogic {
     // MARK: - Fields
-    private let presenter: ChatPresentationLogic
+    private let presenter: UserChatPresentationLogic
     
     // MARK: - Lifecycle
-    init(presenter: ChatPresentationLogic) {
+    init(presenter: UserChatPresentationLogic) {
         self.presenter = presenter
     }
     

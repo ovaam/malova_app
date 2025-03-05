@@ -132,11 +132,11 @@ final class MainViewController: UIViewController,
     
     // MARK: - Actions
     @objc func appointmentButtonTapped() {
-        // go to
+        router.routeToAppointment()
     }
     
     @objc func scanButtonTapped() {
-        // go to other screen
+        router.routeToFaceScan()
     }
     
     @objc func procedureButtonTapped() {

@@ -7,19 +7,19 @@
 
 import UIKit
 
-protocol ChatPresentationLogic {
-    typealias Model = ChatModel
+protocol UserChatPresentationLogic {
+    typealias Model = UserChatModel
     func presentStart(_ response: Model.Start.Response)
     // func present(_ response: Model..Response)
 }
 
-final class ChatPresenter: ChatPresentationLogic {
+final class UserChatPresenter: UserChatPresentationLogic {
     // MARK: - Constants
     private enum Constants {
         
     }
     
-    weak var view: ChatDisplayLogic?
+    weak var view: UserChatDisplayLogic?
     
     // MARK: - PresentationLogic
     func presentStart(_ response: Model.Start.Response) {

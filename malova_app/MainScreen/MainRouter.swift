@@ -29,11 +29,13 @@ final class MainRouter: MainRoutingLogic {
     }
     
     func routeToAppointment() {
-        
+        let nextVC = UserChatAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     func routeToFaceScan() {
-        
+        let nextVC = AdminChatListAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     func routeToAboutClinic() {

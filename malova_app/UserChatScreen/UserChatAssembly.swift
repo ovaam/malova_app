@@ -7,12 +7,12 @@
 
 import UIKit
 
-enum ChatAssembly {
+enum UserChatAssembly {
     static func build() -> UIViewController {
-        let router: ChatRouter = ChatRouter()
-        let presenter: ChatPresenter = ChatPresenter()
-        let interactor: ChatInteractor = ChatInteractor(presenter: presenter)
-        let viewController: ChatViewController = ChatViewController(
+        let router: UserChatRouter = UserChatRouter()
+        let presenter: UserChatPresenter = UserChatPresenter()
+        let interactor: UserChatInteractor = UserChatInteractor(presenter: presenter)
+        let viewController: UserChatViewController = UserChatViewController(
             router: router,
             interactor: interactor
         )

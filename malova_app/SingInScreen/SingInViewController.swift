@@ -77,6 +77,7 @@ final class SingInViewController: UIViewController,
     // MARK: - Configuration
     private func setupEmail() {
         emailLabel.text = "Электронная почта"
+        emailLabel.tintColor = .black
         
         view.addSubview(emailLabel)
         
@@ -92,6 +93,7 @@ final class SingInViewController: UIViewController,
         emailTextField.pinLeft(to: view.leadingAnchor, 80)
         emailTextField.pinTop(to: emailLabel.bottomAnchor, 10)
         emailTextField.pinRight(to: view.trailingAnchor, 80)
+        emailTextField.returnKeyType = .done
         
         view.addSubview(emailErrorLabel)
         
@@ -108,9 +110,11 @@ final class SingInViewController: UIViewController,
         passwordLabel.pinLeft(to: view.leadingAnchor, 80)
         passwordLabel.pinTop(to: emailErrorLabel.bottomAnchor, 20)
         passwordLabel.pinRight(to: view.trailingAnchor, 80)
+        passwordLabel.tintColor = .black
         
         passwordTextField.placeholder = "Введите"
         passwordTextField.borderStyle = .roundedRect
+        passwordTextField.returnKeyType = .done
         
         view.addSubview(passwordTextField)
         
