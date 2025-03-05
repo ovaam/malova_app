@@ -69,7 +69,6 @@ final class ProfileViewController: UIViewController,
     // MARK: - Configuration
     private func setupUI() {
         view.backgroundColor = .white
-        title = "Профиль"
         setupGoBackButton()
         setupFullNameLabel()
         setupEmailLabel()
