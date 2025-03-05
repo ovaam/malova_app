@@ -6,9 +6,11 @@
 //
 
 import UIKit
+import FirebaseFirestore
+import FirebaseAuth
 
-protocol ChatDisplayLogic: AnyObject {
-    typealias Model = ChatModel
+protocol UserChatDisplayLogic: AnyObject {
+    typealias Model = UserChatModel
     func displayStart(_ viewModel: Model.Start.ViewModel)
     // func display(_ viewModel: Model..ViewModel)
 }
