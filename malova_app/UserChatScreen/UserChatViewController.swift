@@ -36,6 +36,7 @@ final class UserChatViewController: UIViewController,
     private let db = Firestore.firestore()
     private var messages: [Message] = []
     private var chatId: String?
+    private var inputContainerBottomConstraint: NSLayoutConstraint?
     
     private let goBackButton: UIButton = UIButton()
     private let tableView: UITableView = UITableView()
@@ -71,6 +72,26 @@ final class UserChatViewController: UIViewController,
         // Скрываем клавиартуру при нажатии на экран
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(tapGesture)
+        
+        // Подписываемся на уведомления о клавиатуре
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow(_:)),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide(_:)),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     // MARK: - Configuration
@@ -111,6 +132,10 @@ final class UserChatViewController: UIViewController,
         inputContainer.backgroundColor = UIColor(hex: "EAEAEA")
         
         view.addSubview(inputContainer)
+        
+        // Сохраняем нижний констрейнт
+        inputContainerBottomConstraint = inputContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        inputContainerBottomConstraint?.isActive = true
         
         inputContainer.pinLeft(to: view.leadingAnchor)
         inputContainer.pinRight(to: view.trailingAnchor)
@@ -283,6 +308,42 @@ final class UserChatViewController: UIViewController,
     @objc
     private func backButtonTapped() {
         router.routeToMain()
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        // Получаем информацию о клавиатуре
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
+            return
+        }
+        
+        // Высота клавиатуры
+        let keyboardHeight = keyboardFrame.height
+        
+        // Обновляем констрейнт inputContainer
+        inputContainerBottomConstraint?.constant = -keyboardHeight + view.safeAreaInsets.bottom
+        
+        // Анимация изменения констрейнта
+        UIView.animate(withDuration: animationDuration) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        // Получаем информацию о клавиатуре
+        guard let userInfo = notification.userInfo,
+              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
+            return
+        }
+        
+        // Возвращаем констрейнт inputContainer в исходное положение
+        inputContainerBottomConstraint?.constant = 0
+        
+        // Анимация изменения констрейнта
+        UIView.animate(withDuration: animationDuration) {
+            self.view.layoutIfNeeded()
+        }
     }
     
     // MARK: - DisplayLogic

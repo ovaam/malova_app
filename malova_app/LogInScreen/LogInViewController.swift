@@ -93,6 +93,9 @@ final class LogInViewController: UIViewController,
         setupPassword()
         setupRepeatedPassword()
         setupButton()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        view.addGestureRecognizer(tapGesture)
     }
     
     // MARK: - Configuration
@@ -348,6 +351,10 @@ final class LogInViewController: UIViewController,
                 self.showError(message: errorMessage ?? "Ошибка регистрации.")
             }
         }
+    }
+    
+    @objc private func hideKeyboard() {
+        view.endEditing(true)
     }
     
     // MARK: - DisplayLogic
