@@ -27,6 +27,46 @@ final class UserChatViewController: UIViewController,
     // MARK: - Constants
     private enum Constants {
         static let fatalError: String = "init(coder:) has not been implemented"
+        
+        static let backgroundColor: UIColor = UIColor(hex: "EAEAEA") ?? UIColor()
+        
+        static let cellIdentifier: String = "MessageCell"
+        
+        static let tableViewHeight: Double = 80
+        
+        static let inputContainerHeight: Double = 80
+        
+        static let messageTextPlaceholder: String = "Введите сообщение..."
+        static let messageTextLeft: Double = 16
+        static let messageTextRight: Double = 100
+        static let messageTextTop: Double = 8
+        static let messageTextBottom: Double = 8
+        
+        static let sendButtonText: String = "Отправить"
+        static let sendButtonBackgroundColor: UIColor = UIColor(hex: "647269") ?? UIColor()
+        static let sendButtonTitleColor: UIColor = .white
+        static let sendButtonCornerRaduis: Double = 8
+        static let sendButtonRight: Double = 16
+        static let sendButtonTop: Double = 8
+        static let sendButtonBottom: Double = 8
+        static let sendButtonWidth: Double = 80
+        
+        static let goBackButtonImage: UIImage = UIImage(systemName: "chevron.left") ?? UIImage()
+        static let goBackButtonTintColor: UIColor = .black
+        static let goBackButtonTop: Double = 16
+        static let goBackButtonLeft: Double = 16
+        
+        static let viewAdminTitleBackgroundColor: UIColor = UIColor(hex: "DEE3E0") ?? UIColor()
+        static let viewAdminTitleHeight: Double = 130
+        
+        static let adminTitleFont: UIFont = UIFont(name: "HelveticaNeue-Medium", size: 24) ?? UIFont()
+        static let adminTitleTextColor: UIColor = .black
+        static let adminTitleText: String = "Чат с администратором"
+        static let adminTitleTop: Double = 16
+        
+        static let adminId: String = "fmNA1kJrmGUpuaaCuHaOTAVvPJ82" // реальный ID администратора (ovaam231323@mail.ru passwd: 231323)
+        static let collectionNameChat: String = "chats"
+        static let collectionNameMessages: String = "messages"
     }
     
     // MARK: - Fields
@@ -63,7 +103,7 @@ final class UserChatViewController: UIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(hex: "EAEAEA")
+        view.backgroundColor = Constants.backgroundColor
         interactor.loadStart(Model.Start.Request())
         
         setupUI()
@@ -104,10 +144,10 @@ final class UserChatViewController: UIViewController,
     
     private func setupTableView() {
         tableView.separatorStyle = .none
-        tableView.backgroundColor = UIColor(hex: "EAEAEA")
+        tableView.backgroundColor = Constants.backgroundColor
         
         view.addSubview(tableView)
-        tableView.backgroundColor = UIColor(hex: "EAEAEA")
+        tableView.backgroundColor = Constants.backgroundColor
         
         tableView.pinTop(to: viewAdminTitle.bottomAnchor)
         tableView.pinLeft(to: view.leadingAnchor)
@@ -115,21 +155,21 @@ final class UserChatViewController: UIViewController,
         tableView.pinBottom(to: inputContainer.topAnchor)
         
         // Регистрируем кастомную ячейку
-        tableView.register(MessageCell.self, forCellReuseIdentifier: "MessageCell")
+        tableView.register(MessageCell.self, forCellReuseIdentifier: Constants.cellIdentifier)
 
         // Настройка таблицы
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.backgroundColor = UIColor(hex: "EAEAEA")
+        tableView.backgroundColor = Constants.backgroundColor
 
         // Настройка автоматической высоты ячеек
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 80 // Примерная высота ячейки
+        tableView.estimatedRowHeight = Constants.tableViewHeight
     }
     
     private func setupMessageInput() {
-        inputContainer.backgroundColor = UIColor(hex: "EAEAEA")
+        inputContainer.backgroundColor = Constants.backgroundColor
         
         view.addSubview(inputContainer)
         
@@ -140,73 +180,73 @@ final class UserChatViewController: UIViewController,
         inputContainer.pinLeft(to: view.leadingAnchor)
         inputContainer.pinRight(to: view.trailingAnchor)
         inputContainer.pinBottom(to: view.safeAreaLayoutGuide.bottomAnchor)
-        inputContainer.setHeight(50)
+        inputContainer.setHeight(Constants.inputContainerHeight)
         
-        messageTextField.placeholder = "Введите сообщение..."
+        messageTextField.placeholder = Constants.messageTextPlaceholder
         messageTextField.borderStyle = .roundedRect
 
         inputContainer.addSubview(messageTextField)
         
-        messageTextField.pinLeft(to: inputContainer.leadingAnchor, 16)
-        messageTextField.pinTop(to: inputContainer.topAnchor, 8)
-        messageTextField.pinBottom(to: inputContainer.bottomAnchor, 8)
-        messageTextField.pinRight(to: inputContainer.trailingAnchor, 100)
+        messageTextField.pinLeft(to: inputContainer.leadingAnchor, Constants.messageTextLeft)
+        messageTextField.pinTop(to: inputContainer.topAnchor, Constants.messageTextTop)
+        messageTextField.pinBottom(to: inputContainer.bottomAnchor, Constants.messageTextBottom)
+        messageTextField.pinRight(to: inputContainer.trailingAnchor, Constants.messageTextRight)
         
-        sendButton.setTitle("Отправить", for: .normal)
-        sendButton.backgroundColor = UIColor(hex: "647269")
-        sendButton.setTitleColor(.white, for: .normal)
-        sendButton.layer.cornerRadius = 8
+        sendButton.setTitle(Constants.sendButtonText, for: .normal)
+        sendButton.backgroundColor = Constants.sendButtonBackgroundColor
+        sendButton.setTitleColor(Constants.sendButtonTitleColor, for: .normal)
+        sendButton.layer.cornerRadius = Constants.sendButtonCornerRaduis
         
         inputContainer.addSubview(sendButton)
         
-        sendButton.pinRight(to: inputContainer.trailingAnchor, 16)
-        sendButton.pinTop(to: inputContainer.topAnchor, 8)
-        sendButton.pinBottom(to: inputContainer.bottomAnchor, 8)
-        sendButton.setWidth(80)
+        sendButton.pinRight(to: inputContainer.trailingAnchor, Constants.sendButtonRight)
+        sendButton.pinTop(to: inputContainer.topAnchor, Constants.sendButtonTop)
+        sendButton.pinBottom(to: inputContainer.bottomAnchor, Constants.sendButtonBottom)
+        sendButton.setWidth(Constants.sendButtonWidth)
 
         sendButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
     }
     
     private func setupGoBackButton() {
-        goBackButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
-        goBackButton.tintColor = .black
+        goBackButton.setImage(Constants.goBackButtonImage, for: .normal)
+        goBackButton.tintColor = Constants.goBackButtonTintColor
         
         view.addSubview(goBackButton)
         
-        goBackButton.pinTop(to: view.safeAreaLayoutGuide.topAnchor, 16)
-        goBackButton.pinLeft(to: view.leadingAnchor, 16)
+        goBackButton.pinTop(to: view.safeAreaLayoutGuide.topAnchor, Constants.goBackButtonTop)
+        goBackButton.pinLeft(to: view.leadingAnchor, Constants.goBackButtonLeft)
         
         goBackButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
     }
     
     private func setupAdminTitle() {
-        viewAdminTitle.backgroundColor = UIColor(hex: "DEE3E0")
+        viewAdminTitle.backgroundColor = Constants.viewAdminTitleBackgroundColor
         
         view.addSubview(viewAdminTitle)
         
         viewAdminTitle.pinTop(to: view.topAnchor)
         viewAdminTitle.pinLeft(to: view.leadingAnchor)
         viewAdminTitle.pinRight(to: view.trailingAnchor)
-        viewAdminTitle.setHeight(130)
+        viewAdminTitle.setHeight(Constants.viewAdminTitleHeight)
         
-        adminTitle.font = UIFont(name: "HelveticaNeue-Medium", size: 24)
-        adminTitle.textColor = .black
-        adminTitle.text = "Чат с администратором"
+        adminTitle.font = Constants.adminTitleFont
+        adminTitle.textColor = Constants.adminTitleTextColor
+        adminTitle.text = Constants.adminTitleText
         
         viewAdminTitle.addSubview(adminTitle)
         
-        adminTitle.pinTop(to: viewAdminTitle.safeAreaLayoutGuide.topAnchor, 16)
+        adminTitle.pinTop(to: viewAdminTitle.safeAreaLayoutGuide.topAnchor, Constants.adminTitleTop)
         adminTitle.pinCenterX(to: viewAdminTitle.centerXAnchor)
     }
     
     // MARK: - Create or Load Chat
     private func createOrLoadChat() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
-        let adminId = "fmNA1kJrmGUpuaaCuHaOTAVvPJ82" // реальный ID администратора (ovaam231323@mail.ru passwd: 231323)
+        let adminId = Constants.adminId
         chatId = "\(userId)_\(adminId)"
         
         // Проверяем, существует ли чат
-        db.collection("chats").document(chatId!).getDocument { snapshot, error in
+        db.collection(Constants.collectionNameChat).document(chatId!).getDocument { snapshot, error in
             if let error = error {
                 print("Ошибка загрузки чата: \(error.localizedDescription)")
                 return
@@ -214,7 +254,7 @@ final class UserChatViewController: UIViewController,
             
             if snapshot?.exists == false {
                 // Создаем новый чат, если он не существует
-                self.db.collection("chats").document(self.chatId!).setData([:]) { error in
+                self.db.collection(Constants.collectionNameChat).document(self.chatId!).setData([:]) { error in
                     if let error = error {
                         print("Ошибка создания чата: \(error.localizedDescription)")
                     } else {
@@ -359,7 +399,7 @@ extension UserChatViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MessageCell", for: indexPath) as? MessageCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellIdentifier, for: indexPath) as? MessageCell else {
             return UITableViewCell()
         }
         
@@ -376,6 +416,6 @@ extension UserChatViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        return Constants.tableViewHeight
     }
 }

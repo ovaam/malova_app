@@ -19,7 +19,7 @@ protocol MainAnalitics: AnyObject {
     // func log(_ viewModel: Model..Info)
 }
 
-// TODO: изменить бэкграунд фото, чтобы лучше было качество может найти замену,убрать свапанье экранов
+// TODO: изменить бэкграунд фото, чтобы лучше было качество может найти замену
 final class MainViewController: UIViewController,
                             MainDisplayLogic {
     // MARK: - Constants
@@ -45,6 +45,13 @@ final class MainViewController: UIViewController,
         static let buttonWight: Double = 450
         static let buttonHeight: Double = 50
         static let buttonCornerRadius: Double = 20
+        
+        static let profileButtonImage: UIImage = UIImage(named: "avatar") ?? UIImage()
+        static let profileButtonColor: UIColor = UIColor(hex: "647269") ?? UIColor()
+        static let profileButtonRight: Double = 20
+        static let profileButtonHeight: Double = 60
+        static let profileButtonWidht: Double = 60
+        static let profileButtonCornerRaduis: Double = 20
     }
     
     // MARK: - Fields
@@ -74,8 +81,8 @@ final class MainViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         interactor.loadStart(Model.Start.Request())
-        
         view.setBackgroundPhoto(to: view, image: mainImage)
+        
         setAppointmentButton()
         setupScanButton()
         setupProcedureButton()
@@ -132,28 +139,18 @@ final class MainViewController: UIViewController,
     }
     
     private func setupProfileButton() {
-        profileButton.setImage(UIImage(named: "avatar"), for: .normal) // Иконка профиля
-        //profileButton.tintColor = UIColor(hex: "647269") // Цвет иконки
-        profileButton.backgroundColor = UIColor(hex: "647269")
+        profileButton.setImage(Constants.profileButtonImage, for: .normal)
+        profileButton.backgroundColor = Constants.profileButtonColor
         profileButton.addTarget(self, action: #selector(openProfile), for: .touchUpInside)
         
-        // Добавление кнопки на экран
         view.addSubview(profileButton)
-        profileButton.translatesAutoresizingMaskIntoConstraints = false
         
-        // Констрейнты для размещения в правом верхнем углу
-        NSLayoutConstraint.activate([
-            profileButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            profileButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            //profileButton.widthAnchor.constraint(equalToConstant: 100), // Ширина кнопки
-            //profileButton.heightAnchor.constraint(equalToConstant: 100) // Высота кнопки
-        ])
+        profileButton.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
+        profileButton.pinRight(to: view.trailingAnchor, Constants.profileButtonRight)
+        profileButton.setHeight(Constants.profileButtonHeight)
+        profileButton.setWidth(Constants.profileButtonWidht)
         
-        profileButton.setHeight(60)
-        profileButton.setWidth(60)
-        
-        // Делаем кнопку квадратной
-        profileButton.layer.cornerRadius = 20 // Закругление углов
+        profileButton.layer.cornerRadius = Constants.profileButtonCornerRaduis
         profileButton.layer.masksToBounds = true
     }
     

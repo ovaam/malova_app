@@ -359,13 +359,13 @@
 		6CF418852D51BF6F00E9FA08 /* malova_app */ = {
 			isa = PBXGroup;
 			children = (
+				6CDCE52D2D77B20700191A53 /* AdminChatScreen */,
+				6CF419272D527D1100E9FA08 /* UserChatScreen */,
 				6CF4192C2D527D7100E9FA08 /* Sertificates Screen */,
 				6CF4192B2D527D5D00E9FA08 /* AboutClinic Screen */,
 				6C33054F2D711EB9009D0098 /* FaceScanScreen */,
 				6CF4192A2D527D4B00E9FA08 /* Procedures Screen */,
 				6CDCE5462D77B36900191A53 /* AdminChatListScreen */,
-				6CDCE52D2D77B20700191A53 /* AdminChatScreen */,
-				6CF419272D527D1100E9FA08 /* UserChatScreen */,
 				6CF419262D527D0800E9FA08 /* Settings Screen */,
 				6CF419252D527CE300E9FA08 /* Profile Screen */,
 				6CF4191F2D51C42500E9FA08 /* MainScreen */,
@@ -499,13 +499,13 @@
 		6CF419272D527D1100E9FA08 /* UserChatScreen */ = {
 			isa = PBXGroup;
 			children = (
+				6CDCE55F2D77D14900191A53 /* MessageCell.swift */,
 				6CDCE5172D77A3A400191A53 /* UserChatViewController.swift */,
 				6CDCE5192D77A3DA00191A53 /* UserChatPresenter.swift */,
 				6CDCE51D2D77A3FE00191A53 /* UserChatInteractor.swift */,
 				6CDCE5212D77A43200191A53 /* UserChatModel.swift */,
 				6CDCE5252D77A44900191A53 /* UserChatRouter.swift */,
 				6CDCE5292D77A46500191A53 /* UserChatAssembly.swift */,
-				6CDCE55F2D77D14900191A53 /* MessageCell.swift */,
 			);
 			path = UserChatScreen;
 			sourceTree = "<group>";

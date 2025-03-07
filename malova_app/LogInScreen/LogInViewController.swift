@@ -105,7 +105,7 @@ final class LogInViewController: UIViewController,
         view.addSubview(emailLabel)
         
         emailLabel.pinLeft(to: view.leadingAnchor, 80)
-        emailLabel.pinTop(to: view.topAnchor, 260)
+        emailLabel.pinTop(to: view.topAnchor, 300)
         emailLabel.pinRight(to: view.trailingAnchor, 80)
         
         emailTextField.placeholder = "sometext@gmail.com"
@@ -281,7 +281,7 @@ final class LogInViewController: UIViewController,
         loginButton.backgroundColor = .black
         loginButton.layer.cornerRadius = 10
         
-        loginButton.pinTop(to: repeatedPasswordTextField.bottomAnchor, 30)
+        loginButton.pinTop(to: repeatedPasswordTextField.bottomAnchor, 70)
         loginButton.pinLeft(to: view.leadingAnchor, 70)
         loginButton.pinRight(to: view.trailingAnchor, 70)
         
