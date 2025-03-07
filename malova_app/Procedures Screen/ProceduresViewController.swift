@@ -59,10 +59,8 @@ final class ProceduresViewController: UIViewController,
         interactor.loadStart(Model.Start.Request())
         
         view.backgroundColor = UIColor(hex: "EAEAEA")
-        // Загрузка данных
         categories = loadProcedures()
         
-        // Настройка таблицы
         setupTableView()
         setupLabel()
         setupGoBackButton()
@@ -99,22 +97,13 @@ final class ProceduresViewController: UIViewController,
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
-        // Добавляем таблицу в иерархию представлений
         view.addSubview(tableView)
         tableView.backgroundColor = UIColor(hex: "EAEAEA")
         
-//        tableView.pinTop(to: view.topAnchor, 250)
-//        tableView.pinLeft(to: view.leadingAnchor)
-//        tableView.pinRight(to: view.trailingAnchor)
-        
-        // Устанавливаем constraints для таблицы
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(lessThanOrEqualTo: view.topAnchor, constant: 250),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        tableView.pinTop(to: view.topAnchor, 250)
+        tableView.pinLeft(to: view.leadingAnchor)
+        tableView.pinRight(to: view.trailingAnchor)
+        tableView.pinBottom(to: view.bottomAnchor)
         
         // Перезагружаем данные таблицы
         tableView.reloadData()
