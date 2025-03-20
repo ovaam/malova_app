@@ -22,51 +22,51 @@ protocol UserChatAnalitics: AnyObject {
 }
 
 
-final class UserChatViewController: UIViewController,
-                                    UserChatDisplayLogic {
+final class UserChatViewController: UIViewController, UserChatDisplayLogic {
     // MARK: - Constants
     private enum Constants {
         static let fatalError: String = "init(coder:) has not been implemented"
         
         static let backgroundColor: UIColor = UIColor(hex: "EAEAEA") ?? UIColor()
+        static let sendButtonBackgroundColor: UIColor = UIColor(hex: "647269") ?? UIColor()
+        static let sendButtonTitleColor: UIColor = .white
+        static let goBackButtonTintColor: UIColor = .black
+        static let viewAdminTitleBackgroundColor: UIColor = UIColor(hex: "DEE3E0") ?? UIColor()
+        static let adminTitleTextColor: UIColor = .black
         
         static let cellIdentifier: String = "MessageCell"
-        
-        static let tableViewHeight: Double = 80
-        
-        static let inputContainerHeight: Double = 80
-        
         static let messageTextPlaceholder: String = "Введите сообщение..."
+        static let sendButtonText: String = "Отправить"
+        static let adminTitleText: String = "Чат с администратором"
+        
+        static let adminTitleFont: UIFont = UIFont(name: "HelveticaNeue-Medium", size: 24) ?? UIFont()
+        
+        static let goBackButtonImage: UIImage = UIImage(systemName: "chevron.left") ?? UIImage()
+
+        static let tableViewHeight: Double = 80
+        static let inputContainerHeight: Double = 80
         static let messageTextLeft: Double = 16
         static let messageTextRight: Double = 100
         static let messageTextTop: Double = 8
         static let messageTextBottom: Double = 8
-        
-        static let sendButtonText: String = "Отправить"
-        static let sendButtonBackgroundColor: UIColor = UIColor(hex: "647269") ?? UIColor()
-        static let sendButtonTitleColor: UIColor = .white
-        static let sendButtonCornerRaduis: Double = 8
+        static let sendButtonCornerRadius: Double = 8
         static let sendButtonRight: Double = 16
         static let sendButtonTop: Double = 8
         static let sendButtonBottom: Double = 8
         static let sendButtonWidth: Double = 80
-        
-        static let goBackButtonImage: UIImage = UIImage(systemName: "chevron.left") ?? UIImage()
-        static let goBackButtonTintColor: UIColor = .black
         static let goBackButtonTop: Double = 16
         static let goBackButtonLeft: Double = 16
-        
-        static let viewAdminTitleBackgroundColor: UIColor = UIColor(hex: "DEE3E0") ?? UIColor()
         static let viewAdminTitleHeight: Double = 130
-        
-        static let adminTitleFont: UIFont = UIFont(name: "HelveticaNeue-Medium", size: 24) ?? UIFont()
-        static let adminTitleTextColor: UIColor = .black
-        static let adminTitleText: String = "Чат с администратором"
         static let adminTitleTop: Double = 16
         
         static let adminId: String = "fmNA1kJrmGUpuaaCuHaOTAVvPJ82" // реальный ID администратора (ovaam231323@mail.ru passwd: 231323)
         static let collectionNameChat: String = "chats"
         static let collectionNameMessages: String = "messages"
+        
+        static let chatLoadError: String = "Ошибка загрузки чата:"
+        static let chatCreateError: String = "Ошибка создания чата:"
+        static let messagesLoadError: String = "Ошибка загрузки сообщений:"
+        static let messageSendError: String = "Ошибка отправки сообщения:"
     }
     
     // MARK: - Fields
@@ -109,7 +109,7 @@ final class UserChatViewController: UIViewController,
         setupUI()
         createOrLoadChat()
         
-        // Скрываем клавиартуру при нажатии на экран
+        // Скрываем клавиатуру при нажатии на экран
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(tapGesture)
         
@@ -195,7 +195,7 @@ final class UserChatViewController: UIViewController,
         sendButton.setTitle(Constants.sendButtonText, for: .normal)
         sendButton.backgroundColor = Constants.sendButtonBackgroundColor
         sendButton.setTitleColor(Constants.sendButtonTitleColor, for: .normal)
-        sendButton.layer.cornerRadius = Constants.sendButtonCornerRaduis
+        sendButton.layer.cornerRadius = Constants.sendButtonCornerRadius
         
         inputContainer.addSubview(sendButton)
         
@@ -248,7 +248,7 @@ final class UserChatViewController: UIViewController,
         // Проверяем, существует ли чат
         db.collection(Constants.collectionNameChat).document(chatId!).getDocument { snapshot, error in
             if let error = error {
-                print("Ошибка загрузки чата: \(error.localizedDescription)")
+                print("\(Constants.chatLoadError) \(error.localizedDescription)")
                 return
             }
             
@@ -256,7 +256,7 @@ final class UserChatViewController: UIViewController,
                 // Создаем новый чат, если он не существует
                 self.db.collection(Constants.collectionNameChat).document(self.chatId!).setData([:]) { error in
                     if let error = error {
-                        print("Ошибка создания чата: \(error.localizedDescription)")
+                        print("\(Constants.chatCreateError) \(error.localizedDescription)")
                     } else {
                         self.loadMessages()
                     }
@@ -271,11 +271,11 @@ final class UserChatViewController: UIViewController,
     private func loadMessages() {
         guard let chatId = chatId else { return }
         
-        db.collection("chats").document(chatId).collection("messages")
+        db.collection(Constants.collectionNameChat).document(chatId).collection(Constants.collectionNameMessages)
             .order(by: "timestamp")
             .addSnapshotListener { snapshot, error in
                 if let error = error {
-                    print("Ошибка загрузки сообщений: \(error.localizedDescription)")
+                    print("\(Constants.messagesLoadError) \(error.localizedDescription)")
                     return
                 }
                 
@@ -317,12 +317,12 @@ final class UserChatViewController: UIViewController,
             "timestamp": Timestamp(date: Date())
         ]
         
-        db.collection("chats").document(chatId).collection("messages").addDocument(data: messageData) { error in
+        db.collection(Constants.collectionNameChat).document(chatId).collection(Constants.collectionNameMessages).addDocument(data: messageData) { error in
             // Включаем кнопку после завершения отправки
             self.sendButton.isEnabled = true
             
             if let error = error {
-                print("Ошибка отправки сообщения: \(error.localizedDescription)")
+                print("\(Constants.messageSendError) \(error.localizedDescription)")
             } else {
                 self.messageTextField.text = ""
                 
@@ -388,7 +388,7 @@ final class UserChatViewController: UIViewController,
     
     // MARK: - DisplayLogic
     func displayStart(_ viewModel: Model.Start.ViewModel) {
-        
+        // Обработка данных для отображения
     }
 }
 

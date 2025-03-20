@@ -22,11 +22,46 @@ protocol AdminChatAnalitics: AnyObject {
 }
 
 
-final class AdminChatViewController: UIViewController,
-                                     AdminChatDisplayLogic {
+final class AdminChatViewController: UIViewController, AdminChatDisplayLogic {
     // MARK: - Constants
     private enum Constants {
         static let fatalError: String = "init(coder:) has not been implemented"
+        
+        static let backgroundColor: UIColor = UIColor(hex: "EAEAEA") ?? UIColor()
+        static let sendButtonBackgroundColor: UIColor = UIColor(hex: "647269") ?? UIColor()
+        static let sendButtonTitleColor: UIColor = .white
+        static let goBackButtonTintColor: UIColor = .black
+        static let viewAdminTitleBackgroundColor: UIColor = UIColor(hex: "DEE3E0") ?? UIColor()
+        static let adminTitleTextColor: UIColor = .black
+        
+        static let cellIdentifier: String = "AdminMessageCell"
+        static let messageTextPlaceholder: String = "Введите сообщение..."
+        static let sendButtonText: String = "Отправить"
+        static let adminTitleText: String = "Чат с пользователем"
+        
+        static let adminTitleFont: UIFont = UIFont(name: "HelveticaNeue-Medium", size: 24) ?? UIFont()
+        
+        static let goBackButtonImage: UIImage = UIImage(systemName: "chevron.left") ?? UIImage()
+        
+        static let inputContainerHeight: Double = 50
+        static let messageTextLeft: Double = 16
+        static let messageTextRight: Double = 100
+        static let messageTextTop: Double = 8
+        static let messageTextBottom: Double = 8
+        static let sendButtonCornerRadius: Double = 8
+        static let sendButtonRight: Double = 16
+        static let sendButtonTop: Double = 8
+        static let sendButtonBottom: Double = 8
+        static let sendButtonWidth: Double = 80
+        static let goBackButtonTop: Double = 16
+        static let goBackButtonLeft: Double = 16
+        static let viewAdminTitleHeight: Double = 130
+        static let adminTitleTop: Double = 16
+        
+        static let authError: String = "Ошибка: администратор не аутентифицирован"
+        static let messageSendError: String = "Ошибка отправки сообщения"
+        static let messagesLoadError: String = "Ошибка загрузки сообщений"
+        static let emptyMessageError: String = "Пожалуйста, введите сообщение"
     }
     
     // MARK: - Fields
@@ -66,12 +101,12 @@ final class AdminChatViewController: UIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(hex: "EAEAEA")
+        view.backgroundColor = Constants.backgroundColor
         interactor.loadStart(Model.Start.Request())
         setupUI()
         loadMessages()
         
-        // Скрываем клавиартуру при нажатии на экран
+        // Скрываем клавиатуру при нажатии на экран
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(tapGesture)
         
@@ -106,10 +141,10 @@ final class AdminChatViewController: UIViewController,
     
     private func setupTableView() {
         tableView.separatorStyle = .none
-        tableView.backgroundColor = UIColor(hex: "EAEAEA")
+        tableView.backgroundColor = Constants.backgroundColor
         
         view.addSubview(tableView)
-        tableView.backgroundColor = UIColor(hex: "EAEAEA")
+        tableView.backgroundColor = Constants.backgroundColor
         
         tableView.pinTop(to: viewAdminTitle.bottomAnchor)
         tableView.pinLeft(to: view.leadingAnchor)
@@ -117,13 +152,13 @@ final class AdminChatViewController: UIViewController,
         tableView.pinBottom(to: inputContainer.topAnchor)
         
         // Регистрируем кастомную ячейку
-        tableView.register(MessageCell.self, forCellReuseIdentifier: "AdminMessageCell")
+        tableView.register(MessageCell.self, forCellReuseIdentifier: Constants.cellIdentifier)
 
         // Настройка таблицы
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.backgroundColor = UIColor(hex: "EAEAEA")
+        tableView.backgroundColor = Constants.backgroundColor
 
         // Настройка автоматической высоты ячеек
         tableView.rowHeight = UITableView.automaticDimension
@@ -131,7 +166,7 @@ final class AdminChatViewController: UIViewController,
     }
     
     private func setupMessageInput() {
-        inputContainer.backgroundColor = UIColor(hex: "EAEAEA")
+        inputContainer.backgroundColor = Constants.backgroundColor
         
         view.addSubview(inputContainer)
         
@@ -142,65 +177,66 @@ final class AdminChatViewController: UIViewController,
         inputContainer.pinLeft(to: view.leadingAnchor)
         inputContainer.pinRight(to: view.trailingAnchor)
         inputContainer.pinBottom(to: view.safeAreaLayoutGuide.bottomAnchor)
-        inputContainer.setHeight(50)
+        inputContainer.setHeight(Constants.inputContainerHeight)
         
-        messageTextField.placeholder = "Введите сообщение..."
+        messageTextField.placeholder = Constants.messageTextPlaceholder
         messageTextField.borderStyle = .roundedRect
 
         inputContainer.addSubview(messageTextField)
         
-        messageTextField.pinLeft(to: inputContainer.leadingAnchor, 16)
-        messageTextField.pinTop(to: inputContainer.topAnchor, 8)
-        messageTextField.pinBottom(to: inputContainer.bottomAnchor, 8)
-        messageTextField.pinRight(to: inputContainer.trailingAnchor, 100)
+        messageTextField.pinLeft(to: inputContainer.leadingAnchor, Constants.messageTextLeft)
+        messageTextField.pinTop(to: inputContainer.topAnchor, Constants.messageTextTop)
+        messageTextField.pinBottom(to: inputContainer.bottomAnchor, Constants.messageTextBottom)
+        messageTextField.pinRight(to: inputContainer.trailingAnchor, Constants.messageTextRight)
         
-        sendButton.setTitle("Отправить", for: .normal)
-        sendButton.backgroundColor = UIColor(hex: "647269")
-        sendButton.setTitleColor(.white, for: .normal)
-        sendButton.layer.cornerRadius = 8
+        sendButton.setTitle(Constants.sendButtonText, for: .normal)
+        sendButton.backgroundColor = Constants.sendButtonBackgroundColor
+        sendButton.setTitleColor(Constants.sendButtonTitleColor, for: .normal)
+        sendButton.layer.cornerRadius = Constants.sendButtonCornerRadius
         
         inputContainer.addSubview(sendButton)
         
-        sendButton.pinRight(to: inputContainer.trailingAnchor, 16)
-        sendButton.pinTop(to: inputContainer.topAnchor, 8)
-        sendButton.pinBottom(to: inputContainer.bottomAnchor, 8)
-        sendButton.setWidth(80)
+        sendButton.pinRight(to: inputContainer.trailingAnchor, Constants.sendButtonRight)
+        sendButton.pinTop(to: inputContainer.topAnchor, Constants.sendButtonTop)
+        sendButton.pinBottom(to: inputContainer.bottomAnchor, Constants.sendButtonBottom)
+        sendButton.setWidth(Constants.sendButtonWidth)
 
         sendButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
     }
     
     private func setupGoBackButton() {
-        goBackButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
-        goBackButton.tintColor = .black
+        goBackButton.setImage(Constants.goBackButtonImage, for: .normal)
+        goBackButton.tintColor = Constants.goBackButtonTintColor
         
         view.addSubview(goBackButton)
         
-        goBackButton.pinTop(to: view.safeAreaLayoutGuide.topAnchor, 16)
-        goBackButton.pinLeft(to: view.leadingAnchor, 16)
+        goBackButton.pinTop(to: view.safeAreaLayoutGuide.topAnchor, Constants.goBackButtonTop)
+        goBackButton.pinLeft(to: view.leadingAnchor, Constants.goBackButtonLeft)
         
         goBackButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
     }
     
     private func setupAdminTitle() {
-        viewAdminTitle.backgroundColor = UIColor(hex: "DEE3E0")
+        viewAdminTitle.backgroundColor = Constants.viewAdminTitleBackgroundColor
         
         view.addSubview(viewAdminTitle)
         
         viewAdminTitle.pinTop(to: view.topAnchor)
         viewAdminTitle.pinLeft(to: view.leadingAnchor)
         viewAdminTitle.pinRight(to: view.trailingAnchor)
-        viewAdminTitle.setHeight(130)
+        viewAdminTitle.setHeight(Constants.viewAdminTitleHeight)
         
-        adminTitle.font = UIFont(name: "HelveticaNeue-Medium", size: 24)
-        adminTitle.textColor = .black
-        adminTitle.text = "Чат с пользователем"
+        adminTitle.font = Constants.adminTitleFont
+        adminTitle.textColor = Constants.adminTitleTextColor
+        adminTitle.text = Constants.adminTitleText
         
         viewAdminTitle.addSubview(adminTitle)
         
-        adminTitle.pinTop(to: viewAdminTitle.safeAreaLayoutGuide.topAnchor, 16)
+        adminTitle.pinTop(to: viewAdminTitle.safeAreaLayoutGuide.topAnchor, Constants.adminTitleTop)
         adminTitle.pinCenterX(to: viewAdminTitle.centerXAnchor)
     }
     
+    // MARK: - Load Messages
     private func loadMessages() {
         guard let chatId = chatId else { return }
         
@@ -208,7 +244,7 @@ final class AdminChatViewController: UIViewController,
             .order(by: "timestamp")
             .addSnapshotListener { snapshot, error in
                 if let error = error {
-                    print("Ошибка загрузки сообщений: \(error.localizedDescription)")
+                    print("\(Constants.messagesLoadError): \(error.localizedDescription)")
                     return
                 }
                 
@@ -242,8 +278,8 @@ final class AdminChatViewController: UIViewController,
     @objc private func sendMessage() {
         // Проверяем, аутентифицирован ли администратор
         guard let user = Auth.auth().currentUser else {
-            print("Ошибка: администратор не аутентифицирован")
-            showError(message: "Администратор не аутентифицирован")
+            print(Constants.authError)
+            showError(message: Constants.authError)
             return
         }
         
@@ -253,8 +289,8 @@ final class AdminChatViewController: UIViewController,
         // Проверяем, что chatId и text не nil
         guard let chatId = chatId,
               let text = messageTextField.text, !text.isEmpty else {
-            print("Ошибка: отсутствуют необходимые данные")
-            showError(message: "Пожалуйста, введите сообщение")
+            print(Constants.emptyMessageError)
+            showError(message: Constants.emptyMessageError)
             return
         }
         
@@ -268,8 +304,8 @@ final class AdminChatViewController: UIViewController,
         // Отправляем сообщение в Firestore
         db.collection("chats").document(chatId).collection("messages").addDocument(data: messageData) { error in
             if let error = error {
-                print("Ошибка отправки сообщения: \(error.localizedDescription)")
-                self.showError(message: "Ошибка отправки сообщения")
+                print("\(Constants.messageSendError): \(error.localizedDescription)")
+                self.showError(message: Constants.messageSendError)
             } else {
                 self.messageTextField.text = "" // Очищаем поле ввода
             }
@@ -323,7 +359,7 @@ final class AdminChatViewController: UIViewController,
     
     // MARK: - DisplayLogic
     func displayStart(_ viewModel: Model.Start.ViewModel) {
-        
+        // Обработка данных для отображения
     }
 }
 
@@ -334,7 +370,7 @@ extension AdminChatViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "AdminMessageCell", for: indexPath) as? MessageCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellIdentifier, for: indexPath) as? MessageCell else {
             return UITableViewCell()
         }
         

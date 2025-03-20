@@ -8,13 +8,14 @@
 import UIKit
 
 protocol AdminChatListRoutingLogic {
-    func routeTo()
+    func routeToMain()
 }
 
 final class AdminChatListRouter: AdminChatListRoutingLogic {
     weak var view: UIViewController?
     
-    func routeTo() {
-        
+    func routeToMain() {
+        let nextVC = MainAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
     }
 }

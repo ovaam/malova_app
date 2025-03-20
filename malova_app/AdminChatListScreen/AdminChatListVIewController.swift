@@ -22,11 +22,24 @@ protocol AdminChatListAnalitics: AnyObject {
 }
 
 
-final class AdminChatListViewController: UIViewController,
-                                         AdminChatListDisplayLogic {
+final class AdminChatListViewController: UIViewController, AdminChatListDisplayLogic {
     // MARK: - Constants
     private enum Constants {
         static let fatalError: String = "init(coder:) has not been implemented"
+        
+        static let whiteColor: UIColor = .white
+        static let blackColor: UIColor = .black
+        
+        static let titleText: String = "Чаты"
+        static let backButtonImageName: String = "chevron.left"
+        static let cellIdentifier: String = "cell"
+        
+        static let backButtonTopOffset: CGFloat = 16
+        static let backButtonLeftOffset: CGFloat = 16
+        
+        static let chatsLoadError: String = "Ошибка загрузки чатов:"
+        static let userLoadError: String = "Ошибка загрузки пользователя:"
+        static let fullNameError: String = "Ошибка: поле fullName отсутствует у пользователя"
     }
     
     // MARK: - Fields
@@ -34,15 +47,15 @@ final class AdminChatListViewController: UIViewController,
     private let interactor: AdminChatListBusinessLogic
     
     private let db = Firestore.firestore()
-        private var chats: [Chat] = []
-
-    // MARK: - UI Elements
+    private var chats: [Chat] = []
+    
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.cellIdentifier)
         return tableView
     }()
-
+    
+    private let goBackButton: UIButton = UIButton()
     
     // MARK: - LifeCycle
     init(
@@ -62,19 +75,20 @@ final class AdminChatListViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         interactor.loadStart(Model.Start.Request())
+        setupGoBackButton()
         setupUI()
         loadChats()
     }
     
     // MARK: - Configuration
     private func setupUI() {
-        view.backgroundColor = .white
-        title = "Чаты"
+        view.backgroundColor = Constants.whiteColor
+        title = Constants.titleText
         
         // Добавляем таблицу
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
+        tableView.pinTop(to: goBackButton.bottomAnchor)
         tableView.pinLeft(to: view.leadingAnchor)
         tableView.pinRight(to: view.trailingAnchor)
         tableView.pinBottom(to: view.bottomAnchor)
@@ -84,11 +98,23 @@ final class AdminChatListViewController: UIViewController,
         tableView.dataSource = self
     }
     
+    private func setupGoBackButton() {
+        goBackButton.setImage(UIImage(systemName: Constants.backButtonImageName), for: .normal)
+        goBackButton.tintColor = Constants.blackColor
+        
+        view.addSubview(goBackButton)
+        
+        goBackButton.pinTop(to: view.safeAreaLayoutGuide.topAnchor, Constants.backButtonTopOffset)
+        goBackButton.pinLeft(to: view.leadingAnchor, Constants.backButtonLeftOffset)
+        
+        goBackButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+    }
+    
     // MARK: - Load Chats
     private func loadChats() {
         db.collection("chats").getDocuments { snapshot, error in
             if let error = error {
-                print("Ошибка загрузки чатов: \(error.localizedDescription)")
+                print("\(Constants.chatsLoadError) \(error.localizedDescription)")
                 return
             }
             
@@ -107,14 +133,14 @@ final class AdminChatListViewController: UIViewController,
                 // Загружаем ФИО пользователя из коллекции users
                 self.db.collection("users").document(userId).getDocument { userSnapshot, userError in
                     if let userError = userError {
-                        print("Ошибка загрузки пользователя: \(userError.localizedDescription)")
+                        print("\(Constants.userLoadError) \(userError.localizedDescription)")
                         dispatchGroup.leave()
                         return
                     }
                     
                     guard let userData = userSnapshot?.data(),
                           let fullName = userData["fullName"] as? String else {
-                        print("Ошибка: поле fullName отсутствует у пользователя \(userId)")
+                        print("\(Constants.fullNameError) \(userId)")
                         dispatchGroup.leave()
                         return
                     }
@@ -132,8 +158,8 @@ final class AdminChatListViewController: UIViewController,
             }
         }
     }
-
-        // MARK: - Open Chat
+    
+    // MARK: - Open Chat
     private func openChat(chatId: String) {
         let chatVC = AdminChatAssembly.build(chatId: chatId)
         navigationController?.pushViewController(chatVC, animated: true)
@@ -141,23 +167,24 @@ final class AdminChatListViewController: UIViewController,
     
     // MARK: - Actions
     @objc
-    private func wasTapped() {
-        
+    private func backButtonTapped() {
+        router.routeToMain()
     }
     
     // MARK: - DisplayLogic
     func displayStart(_ viewModel: Model.Start.ViewModel) {
-        
+        // Обработка данных для отображения
     }
 }
 
+// MARK: - UITableViewDelegate, UITableViewDataSource
 extension AdminChatListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chats.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellIdentifier, for: indexPath)
         let chat = chats[indexPath.row]
         cell.textLabel?.text = chat.userFullName // Отображаем ФИО пользователя
         return cell
@@ -168,4 +195,3 @@ extension AdminChatListViewController: UITableViewDelegate, UITableViewDataSourc
         openChat(chatId: chat.chatId)
     }
 }
-

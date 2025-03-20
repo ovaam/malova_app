@@ -32,8 +32,13 @@ class WelcomeViewController: UIViewController, WelcomeDisplayLogic {
         static let startButtonText: String = "start"
         static let startButtonColor: UIColor = .white
         static let startButtonFont: String = "TimesNewRomanPSMT"
+        static let startButtonFontSize: CGFloat = 28
+        static let startButtonAlphaComponent: Double = 0.3
+        static let startButtonCornerRadius: Double = 15
+        static let startButtonTop: Double = 390
+        static let startButtonLeft: Double = 90
+        static let startButtonRight: Double = 90
     }
-
 
     private var interactor: WelcomeBusinessLogic?
     private var router: WelcomeRoutingLogic?
@@ -55,14 +60,12 @@ class WelcomeViewController: UIViewController, WelcomeDisplayLogic {
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(Constants.fatalError)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = true
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        
         setupUI()
         interactor?.fetchGreeting()
     }
@@ -102,23 +105,19 @@ class WelcomeViewController: UIViewController, WelcomeDisplayLogic {
     
     private func setStartButton() {
         startButton.setTitle(Constants.startButtonText, for: .normal)
-        startButton.titleLabel?.font = UIFont(name: "TimesNewRomanPSMT", size: 28)
-        
-        startButton.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-        //startButton.backgroundColor.
-        //startButton.layer.opacity = 0.3
+        startButton.titleLabel?.font = UIFont(name: Constants.startButtonFont, size: Constants.startButtonFontSize)
+        startButton.backgroundColor = UIColor.black.withAlphaComponent(Constants.startButtonAlphaComponent)
         
         
-        startButton.setTitleColor(.white, for: .normal)
-        startButton.layer.cornerRadius = 15
+        startButton.setTitleColor(Constants.startButtonColor, for: .normal)
+        startButton.layer.cornerRadius = Constants.startButtonCornerRadius
         
         startButton.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
         view.addSubview(startButton)
         
-        //startButton.pinCenterX(to: view.centerXAnchor)
-        startButton.pinTop(to: malovaLabel, 390)
-        startButton.pinLeft(to: view.leadingAnchor, 90)
-        startButton.pinRight(to: view.trailingAnchor, 90)
+        startButton.pinTop(to: malovaLabel, Constants.startButtonTop)
+        startButton.pinLeft(to: view.leadingAnchor, Constants.startButtonLeft)
+        startButton.pinRight(to: view.trailingAnchor, Constants.startButtonRight)
     }
 
     @objc func startButtonTapped() {
@@ -126,7 +125,7 @@ class WelcomeViewController: UIViewController, WelcomeDisplayLogic {
     }
 
     func displayGreeting(viewModel: Welcome.Greeting.ViewModel) {
-        // Обработка данных для отображения на экране
+        
     }
 }
 
