@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 protocol ProceduresDisplayLogic: AnyObject {
     typealias Model = ProceduresModel
@@ -19,19 +20,18 @@ protocol ProceduresAnalitics: AnyObject {
     // func log(_ viewModel: Model..Info)
 }
 
-
-// TODO: make a button that will save name of procedure and give it to appointment chat screen, so we wont need to do an another one screen like this one
-
-final class ProceduresViewController: UIViewController,
-                                      ProceduresDisplayLogic {
+final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
     // MARK: - Constants
     private enum Constants {
         static let fatalError: String = "init(coder:) has not been implemented"
+        static let cellIdentifier: String = "cell"
+        static let collectionName: String = "procedures"
     }
     
     // MARK: - Fields
     private let router: ProceduresRoutingLogic
     private let interactor: ProceduresBusinessLogic
+    private let db = Firestore.firestore()
     
     var categories: [ProcedureCategory]?
     let tableView = UITableView()
@@ -59,11 +59,13 @@ final class ProceduresViewController: UIViewController,
         interactor.loadStart(Model.Start.Request())
         
         view.backgroundColor = UIColor(hex: "EAEAEA")
-        categories = loadProcedures()
         
         setupTableView()
         setupLabel()
         setupGoBackButton()
+        
+        // Загружаем данные из Firestore
+        loadProceduresFromFirestore()
     }
     
     // MARK: - Configuration
@@ -95,7 +97,7 @@ final class ProceduresViewController: UIViewController,
     private func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.cellIdentifier)
         
         view.addSubview(tableView)
         tableView.backgroundColor = UIColor(hex: "EAEAEA")
@@ -104,48 +106,51 @@ final class ProceduresViewController: UIViewController,
         tableView.pinLeft(to: view.leadingAnchor)
         tableView.pinRight(to: view.trailingAnchor)
         tableView.pinBottom(to: view.bottomAnchor)
-        
-        // Перезагружаем данные таблицы
-        tableView.reloadData()
     }
     
-    // Загрузка данных из JSON
-    private func loadProcedures() -> [ProcedureCategory]? {
-        if let url = Bundle.main.url(forResource: "procedures", withExtension: "json") {
-            do {
-                let data = try Data(contentsOf: url)
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                
-                if let sheet2 = json?["Sheet2"] as? [[String: Any]] {
-                    print("Found \(sheet2.count) procedures in JSON.")
-                    let proceduresData = try JSONSerialization.data(withJSONObject: sheet2, options: [])
-                    let procedures = try JSONDecoder().decode([Procedure].self, from: proceduresData)
-                    
-                    // Группируем процедуры по типу
-                    let groupedProcedures = Dictionary(grouping: procedures, by: { $0.type })
-                    
-                    // Сортируем секции по типу процедуры
-                    let sortedCategories = groupedProcedures.map { ProcedureCategory(type: $0.key, procedures: $0.value) }
-                        .sorted { $0.type < $1.type } // Сортировка по алфавиту
-                    
-                    // Сортируем процедуры внутри каждой секции по названию
-                    var finalCategories = sortedCategories
-                    for i in 0..<finalCategories.count {
-                        finalCategories[i].procedures.sort { $0.name < $1.name }
-                    }
-                    
-                    print("Created \(finalCategories.count) categories.")
-                    return finalCategories
-                } else {
-                    print("Sheet2 not found or is not an array.")
-                }
-            } catch {
-                print("Error decoding JSON: \(error)")
+    // Загрузка данных из Firestore
+    private func loadProceduresFromFirestore() {
+        db.collection(Constants.collectionName).getDocuments { [weak self] snapshot, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                print("Ошибка загрузки процедур: \(error.localizedDescription)")
+                return
             }
-        } else {
-            print("JSON file not found in bundle.")
+            
+            guard let documents = snapshot?.documents else {
+                print("Документы не найдены")
+                return
+            }
+            
+            // Преобразуем документы в массив процедур
+            let procedures = documents.compactMap { document -> Procedure? in
+                let data = document.data()
+                guard let type = data["type"] as? String,
+                      let name = data["name"] as? String,
+                      let performer = data["performer"] as? String,
+                      let price = data["price"] as? Int,
+                      let duration = data["duration"] as? String else {
+                    return nil
+                }
+                return Procedure(type: type, performer: performer, name: name, price: price, duration: duration)
+            }
+            
+            // Группируем процедуры по типу
+            let groupedProcedures = Dictionary(grouping: procedures, by: { $0.type })
+            
+            // Создаем категории
+            self.categories = groupedProcedures.map { ProcedureCategory(type: $0.key, procedures: $0.value) }
+                .sorted { $0.type < $1.type } // Сортировка по алфавиту
+            
+            // Сортируем процедуры внутри каждой категории
+            for i in 0..<(self.categories?.count ?? 0) {
+                self.categories?[i].procedures.sort { $0.name < $1.name }
+            }
+            
+            // Обновляем таблицу
+            self.tableView.reloadData()
         }
-        return nil
     }
     
     // MARK: - Actions
@@ -156,10 +161,11 @@ final class ProceduresViewController: UIViewController,
     
     // MARK: - DisplayLogic
     func displayStart(_ viewModel: Model.Start.ViewModel) {
-        
+        // Обработка данных для отображения
     }
 }
 
+// MARK: - UITableViewDataSource
 extension ProceduresViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return categories?.count ?? 0
@@ -170,7 +176,7 @@ extension ProceduresViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellIdentifier, for: indexPath)
         if let procedure = categories?[indexPath.section].procedures[indexPath.row] {
             cell.textLabel?.text = procedure.name
             cell.backgroundColor = UIColor(hex: "EAEAEA")
@@ -182,8 +188,8 @@ extension ProceduresViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - UITableViewDelegate
 extension ProceduresViewController: UITableViewDelegate {
-    // Кастомный заголовок секции
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
         headerView.backgroundColor = UIColor(hex: "EAEAEA")
@@ -191,14 +197,12 @@ extension ProceduresViewController: UITableViewDelegate {
         let label = UILabel()
         label.text = categories?[section].type
         label.textColor = UIColor(hex: "313638")
-        
         label.font = UIFont(name: "HelveticaNeue-Medium", size: 24)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         
         headerView.addSubview(label)
         
-        // Добавляем constraints для label
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
             label.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
@@ -209,15 +213,12 @@ extension ProceduresViewController: UITableViewDelegate {
         return headerView
     }
     
-    // Высота заголовка секции
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
     }
     
-    // Обработка нажатия на ячейку
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let procedure = categories?[indexPath.section].procedures[indexPath.row] {
-            
             let detailVC = DetailAboutProcedureViewController()
             detailVC.procedure = procedure
             

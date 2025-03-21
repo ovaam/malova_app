@@ -21,7 +21,7 @@ protocol LogInAnalitics: AnyObject {
     // func log(_ viewModel: Model..Info)
 }
 
-
+// TODO: - убрать эту глупую идею с белой плашкой на картинке - сделать вью, потому что на темной теме происходит треш
 final class LogInViewController: UIViewController, LogInDisplayLogic {
     // MARK: - Constants
     private enum Constants {
