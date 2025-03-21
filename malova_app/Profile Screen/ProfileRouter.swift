@@ -11,6 +11,7 @@ protocol ProfileRoutingLogic {
     func routeToSettings()
     func routeToMain()
     func routeToAdminChatList()
+    func routeToWelcomeScreen()
 }
 
 final class ProfileRouter: ProfileRoutingLogic {
@@ -27,6 +28,11 @@ final class ProfileRouter: ProfileRoutingLogic {
     
     func routeToAdminChatList() {
         let nextVC = AdminChatListAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    func routeToWelcomeScreen() {
+        let nextVC = WelcomeAssembly.build()
         view?.navigationController?.pushViewController(nextVC, animated: true)
     }
 }

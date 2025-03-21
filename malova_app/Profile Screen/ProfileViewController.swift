@@ -38,6 +38,7 @@ final class ProfileViewController: UIViewController,
     private let ageLabel: UILabel = UILabel()
     private let genderLabel: UILabel = UILabel()
     private let goBackButton: UIButton = UIButton()
+    private let logoutButton = UIButton(type: .system)
     
     private let questionButton: UIButton = UIButton(type: .system)
     
@@ -75,6 +76,7 @@ final class ProfileViewController: UIViewController,
         setupAgeLabel()
         setupGenderLabel()
         setupQuestionButton()
+        setupLogoutButton()
     }
     
     private func setupGoBackButton() {
@@ -87,6 +89,19 @@ final class ProfileViewController: UIViewController,
         goBackButton.pinLeft(to: view.leadingAnchor, 16)
         
         goBackButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+    }
+    
+    private func setupLogoutButton() {
+        logoutButton.setTitle("Выйти", for: .normal)
+        logoutButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Medium", size: 18)
+        logoutButton.tintColor = .red
+        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        
+        view.addSubview(logoutButton)
+        
+        logoutButton.translatesAutoresizingMaskIntoConstraints = false
+        logoutButton.pinTop(to: genderLabel.bottomAnchor, 40)
+        logoutButton.pinCenterX(to: view.centerXAnchor)
     }
     
     private func setupFullNameLabel() {
@@ -174,6 +189,16 @@ final class ProfileViewController: UIViewController,
     
     @objc private func openHelpScreen() {
         
+    }
+    
+    @objc
+    private func logoutButtonTapped() {
+        do {
+            try Auth.auth().signOut()
+            router.routeToWelcomeScreen()
+        } catch let signOutError as NSError {
+            print("Ошибка при выходе из аккаунта: \(signOutError.localizedDescription)")
+        }
     }
     
     // MARK: - DisplayLogic

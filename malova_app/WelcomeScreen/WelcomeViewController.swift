@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 protocol WelcomeDisplayLogic: AnyObject {
     func displayGreeting(viewModel: Welcome.Greeting.ViewModel)
 }
 
-class WelcomeViewController: UIViewController, WelcomeDisplayLogic {
+class WelcomeViewController: UIViewController, WelcomeDisplayLogic, UIGestureRecognizerDelegate {
     // MARK: - Constants
     private enum Constants {
         static let fatalError: String = "init(coder:) has not been implemented"
@@ -66,6 +67,8 @@ class WelcomeViewController: UIViewController, WelcomeDisplayLogic {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         setupUI()
         interactor?.fetchGreeting()
     }
@@ -121,7 +124,12 @@ class WelcomeViewController: UIViewController, WelcomeDisplayLogic {
     }
 
     @objc func startButtonTapped() {
-        router?.routeToSingIn()
+        if Auth.auth().currentUser != nil {
+            // Если пользователь уже авторизован, переходим на главный экран
+            router?.routeToMain()
+        } else {
+            router?.routeToSingIn()
+        }
     }
 
     func displayGreeting(viewModel: Welcome.Greeting.ViewModel) {

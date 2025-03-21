@@ -34,7 +34,9 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
     private let db = Firestore.firestore()
     
     var categories: [ProcedureCategory]?
+    var filteredCategories: [ProcedureCategory]? // Для фильтрации
     let tableView = UITableView()
+    private let searchBar = UISearchBar() // Поле для поиска
     
     private let malovaLabel: UILabel = UILabel()
     private let goBackButton: UIButton = UIButton()
@@ -60,8 +62,9 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
         
         view.backgroundColor = UIColor(hex: "EAEAEA")
         
-        setupTableView()
         setupLabel()
+        setupSearchBar()
+        setupTableView()
         setupGoBackButton()
         
         // Загружаем данные из Firestore
@@ -76,9 +79,9 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
         
         view.addSubview(malovaLabel)
         
-        malovaLabel.pinTop(to: view.topAnchor, 10)
+        malovaLabel.pinTop(to: view.topAnchor, 80)
         malovaLabel.pinRight(to: view.trailingAnchor, 15)
-        malovaLabel.pinBottom(to: view.bottomAnchor, 600)
+        //malovaLabel.pinBottom(to: view.bottomAnchor, 600)
     }
     
     private func setupGoBackButton() {
@@ -93,6 +96,20 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
         goBackButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
     }
     
+    // Настройка поиска
+    private func setupSearchBar() {
+        searchBar.placeholder = "Поиск процедуры"
+        searchBar.delegate = self
+        searchBar.barTintColor = UIColor(hex: "EAEAEA")
+        searchBar.searchTextField.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+        
+        view.addSubview(searchBar)
+        
+        searchBar.pinTop(to: malovaLabel.bottomAnchor)
+        searchBar.pinLeft(to: view.leadingAnchor)
+        searchBar.pinRight(to: view.trailingAnchor)
+    }
+    
     // Настройка таблицы
     private func setupTableView() {
         tableView.dataSource = self
@@ -102,7 +119,7 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
         view.addSubview(tableView)
         tableView.backgroundColor = UIColor(hex: "EAEAEA")
         
-        tableView.pinTop(to: view.topAnchor, 250)
+        tableView.pinTop(to: searchBar.bottomAnchor)
         tableView.pinLeft(to: view.leadingAnchor)
         tableView.pinRight(to: view.trailingAnchor)
         tableView.pinBottom(to: view.bottomAnchor)
@@ -148,9 +165,28 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
                 self.categories?[i].procedures.sort { $0.name < $1.name }
             }
             
+            // Сохраняем отфильтрованные данные
+            self.filteredCategories = self.categories
+            
             // Обновляем таблицу
             self.tableView.reloadData()
         }
+    }
+    
+    // Фильтрация данных
+    private func filterProcedures(with searchText: String) {
+        if searchText.isEmpty {
+            filteredCategories = categories
+        } else {
+            filteredCategories = categories?.compactMap { category in
+                let filteredProcedures = category.procedures.filter {
+                    $0.name.localizedCaseInsensitiveContains(searchText) ||
+                    $0.type.localizedCaseInsensitiveContains(searchText)
+                }
+                return filteredProcedures.isEmpty ? nil : ProcedureCategory(type: category.type, procedures: filteredProcedures)
+            }
+        }
+        tableView.reloadData()
     }
     
     // MARK: - Actions
@@ -168,21 +204,21 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
 // MARK: - UITableViewDataSource
 extension ProceduresViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return categories?.count ?? 0
+        return filteredCategories?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories?[section].procedures.count ?? 0
+        return filteredCategories?[section].procedures.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellIdentifier, for: indexPath)
-        if let procedure = categories?[indexPath.section].procedures[indexPath.row] {
+        if let procedure = filteredCategories?[indexPath.section].procedures[indexPath.row] {
             cell.textLabel?.text = procedure.name
             cell.backgroundColor = UIColor(hex: "EAEAEA")
             cell.textLabel?.textColor = UIColor(hex: "313638")
-            cell.textLabel?.font = UIFont(name: "HelveticaNeue-Medium", size: 16)
-            cell.textLabel?.textAlignment = .center
+            cell.textLabel?.font = UIFont(name: "TimesNewRomanPSMT", size: 16)
+            cell.textLabel?.textAlignment = .left // Выравнивание текста справа
         }
         return cell
     }
@@ -195,10 +231,10 @@ extension ProceduresViewController: UITableViewDelegate {
         headerView.backgroundColor = UIColor(hex: "EAEAEA")
         
         let label = UILabel()
-        label.text = categories?[section].type
+        label.text = filteredCategories?[section].type
         label.textColor = UIColor(hex: "313638")
-        label.font = UIFont(name: "HelveticaNeue-Medium", size: 24)
-        label.textAlignment = .center
+        label.font = UIFont(name: "TimesNewRomanPSMT", size: 24)
+        label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         
         headerView.addSubview(label)
@@ -218,7 +254,7 @@ extension ProceduresViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let procedure = categories?[indexPath.section].procedures[indexPath.row] {
+        if let procedure = filteredCategories?[indexPath.section].procedures[indexPath.row] {
             let detailVC = DetailAboutProcedureViewController()
             detailVC.procedure = procedure
             
@@ -227,6 +263,17 @@ extension ProceduresViewController: UITableViewDelegate {
             
             present(detailVC, animated: true, completion: nil)
         }
+    }
+}
+
+// MARK: - UISearchBarDelegate
+extension ProceduresViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filterProcedures(with: searchText)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder() // Скрываем клавиатуру
     }
 }
 

@@ -21,7 +21,7 @@ protocol SingInAnalitics: AnyObject {
     // func log(_ viewModel: Model..Info)
 }
 
-final class SingInViewController: UIViewController, SingInDisplayLogic, UIGestureRecognizerDelegate {
+final class SingInViewController: UIViewController, SingInDisplayLogic {
     // MARK: - Constants
     private enum Constants {
         static let fatalError: String = "init(coder:) has not been implemented"
@@ -121,9 +121,6 @@ final class SingInViewController: UIViewController, SingInDisplayLogic, UIGestur
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         
         interactor.loadStart(Model.Start.Request())
         view.setBackgroundPhoto(to: view, image: singinImage)

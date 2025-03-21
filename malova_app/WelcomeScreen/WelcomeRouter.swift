@@ -8,6 +8,7 @@ import UIKit
 
 protocol WelcomeRoutingLogic {
     func routeToSingIn()
+    func routeToMain()
 }
 
 final class WelcomeRouter: WelcomeRoutingLogic {
@@ -15,6 +16,11 @@ final class WelcomeRouter: WelcomeRoutingLogic {
     
     func routeToSingIn() {
         let nextVC = SingInAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    func routeToMain() {
+        let nextVC = MainAssembly.build()
         view?.navigationController?.pushViewController(nextVC, animated: true)
     }
 }
