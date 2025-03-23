@@ -79,12 +79,14 @@ final class UserChatViewController: UIViewController, UserChatDisplayLogic {
     private var inputContainerBottomConstraint: NSLayoutConstraint?
     
     private let goBackButton: UIButton = UIButton()
-    private let tableView: UITableView = UITableView()
+    private let tableView: UITableView = UITableView(frame: .zero, style: .plain)
     private let messageTextField: UITextField = UITextField()
     private let adminTitle: UILabel = UILabel()
     private let viewAdminTitle: UIView = UIView()
     private let sendButton: UIButton = UIButton(type: .system)
     private let inputContainer: UIView = UIView()
+    
+    private var messageGroups: [MessageGroup] = []
     
     // MARK: - LifeCycle
     init(
@@ -145,6 +147,7 @@ final class UserChatViewController: UIViewController, UserChatDisplayLogic {
     private func setupTableView() {
         tableView.separatorStyle = .none
         tableView.backgroundColor = Constants.backgroundColor
+        //tableView.sectionHeaderTopPadding = 0
         
         view.addSubview(tableView)
         tableView.backgroundColor = Constants.backgroundColor
@@ -290,16 +293,47 @@ final class UserChatViewController: UIViewController, UserChatDisplayLogic {
                     return Message(senderId: senderId, text: text, timestamp: timestamp.dateValue())
                 } ?? []
                 
+                // Группируем сообщения по дням
+                self.messageGroups = self.groupMessagesByDate(self.messages)
+                
                 self.tableView.reloadData()
                 self.scrollToBottom(animated: false)
             }
     }
     
-    private func scrollToBottom(animated: Bool = true) {
-        if messages.count > 0 {
-            let indexPath = IndexPath(row: messages.count - 1, section: 0)
-            tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
+    private func groupMessagesByDate(_ messages: [Message]) -> [MessageGroup] {
+        let groupedMessages = Dictionary(grouping: messages) { (message: Message) -> Date in
+            // Округляем дату до дня (игнорируем время)
+            Calendar.current.startOfDay(for: message.timestamp)
         }
+        
+        // Преобразуем в массив MessageGroup и сортируем по дате
+        return groupedMessages.map { MessageGroup(date: $0.key, messages: $0.value) }
+            .sorted { $0.date < $1.date }
+    }
+    
+    private func scrollToBottom(animated: Bool = true) {
+        // Проверяем, что таблица обновлена и данные доступны
+        guard !messageGroups.isEmpty else { return }
+        
+        // Получаем индекс последней секции
+        let lastSection = messageGroups.count - 1
+        
+        // Проверяем, что секция существует
+        guard lastSection >= 0 else { return }
+        
+        // Получаем количество строк в последней секции
+        let numberOfRows = messageGroups[lastSection].messages.count
+        
+        // Проверяем, что в секции есть строки
+        guard numberOfRows > 0 else { return }
+        
+        // Создаем индекс последней строки
+        let lastRow = numberOfRows - 1
+        let indexPath = IndexPath(row: lastRow, section: lastSection)
+        
+        // Прокручиваем таблицу к последней строке
+        tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
     }
     
     // MARK: - Actions
@@ -394,8 +428,12 @@ final class UserChatViewController: UIViewController, UserChatDisplayLogic {
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension UserChatViewController: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return messageGroups.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return messages.count
+        return messageGroups[section].messages.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -403,8 +441,7 @@ extension UserChatViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let message = messages[indexPath.row]
-        print("Message: \(message.text)")
+        let message = messageGroups[indexPath.section].messages[indexPath.row]
         let isCurrentUser = message.senderId == Auth.auth().currentUser?.uid
         cell.configure(with: message, isCurrentUser: isCurrentUser)
         
@@ -417,5 +454,30 @@ extension UserChatViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return Constants.tableViewHeight
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = .clear
+        
+        let dateLabel = UILabel()
+        dateLabel.font = UIFont.systemFont(ofSize: 14)
+        dateLabel.textColor = .lightGray
+        dateLabel.textAlignment = .center
+        
+        // Форматируем дату
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d MMMM yyyy"
+        dateLabel.text = dateFormatter.string(from: messageGroups[section].date)
+        
+        headerView.addSubview(dateLabel)
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            dateLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
+            dateLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)
+        ])
+        
+        return headerView
     }
 }

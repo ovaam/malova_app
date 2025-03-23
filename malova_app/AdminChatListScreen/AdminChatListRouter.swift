@@ -10,7 +10,7 @@ import UIKit
 protocol AdminChatListRoutingLogic {
     func routeToMain()
     func routeToWelcome()
-    func routeToChat(chatId: String)
+    func routeToChat(chat: Chat)
 }
 
 final class AdminChatListRouter: AdminChatListRoutingLogic {
@@ -26,8 +26,8 @@ final class AdminChatListRouter: AdminChatListRoutingLogic {
         view?.navigationController?.pushViewController(nextVC, animated: true)
     }
     
-    func routeToChat(chatId: String) {
-        let chatVC = AdminChatAssembly.build(chatId: chatId)
+    func routeToChat(chat: Chat) {
+        let chatVC = AdminChatAssembly.build(chat: chat)
         view?.navigationController?.pushViewController(chatVC, animated: true)
     }
 }

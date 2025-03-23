@@ -35,8 +35,8 @@ final class MainRouter: MainRoutingLogic {
     }
     
     func routeToFaceScan() {
-        let nextVC = AdminChatListAssembly.build()
-        view?.navigationController?.pushViewController(nextVC, animated: true)
+        //let nextVC = AdminChatListAssembly.build()
+        //view?.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     func routeToAboutClinic() {

@@ -28,3 +28,8 @@ struct Message {
     let text: String
     let timestamp: Date
 }
+
+struct MessageGroup {
+    let date: Date
+    let messages: [Message]
+}

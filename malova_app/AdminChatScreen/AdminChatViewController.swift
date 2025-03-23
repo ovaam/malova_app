@@ -37,7 +37,7 @@ final class AdminChatViewController: UIViewController, AdminChatDisplayLogic {
         static let cellIdentifier: String = "AdminMessageCell"
         static let messageTextPlaceholder: String = "Введите сообщение..."
         static let sendButtonText: String = "Отправить"
-        static let adminTitleText: String = "Чат с пользователем"
+        //static let adminTitleText: String = "Чат с пользователем"
         
         static let adminTitleFont: UIFont = UIFont(name: "HelveticaNeue-Medium", size: 24) ?? UIFont()
         
@@ -67,7 +67,7 @@ final class AdminChatViewController: UIViewController, AdminChatDisplayLogic {
     // MARK: - Fields
     private let router: AdminChatRoutingLogic
     private let interactor: AdminChatBusinessLogic
-    private let chatId: String?
+    private let chat: Chat?
     private var inputContainerBottomConstraint: NSLayoutConstraint?
     
     private let db = Firestore.firestore()
@@ -86,11 +86,11 @@ final class AdminChatViewController: UIViewController, AdminChatDisplayLogic {
     init(
         router: AdminChatRoutingLogic,
         interactor: AdminChatBusinessLogic,
-        chatId: String
+        chat: Chat
     ) {
         self.router = router
         self.interactor = interactor
-        self.chatId = chatId
+        self.chat = chat
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -133,10 +133,11 @@ final class AdminChatViewController: UIViewController, AdminChatDisplayLogic {
     
     // MARK: - Configuration
     private func setupUI() {
+        setupAdminViewTitle()
+        setupGoBackButton()
         setupAdminTitle()
         setupMessageInput()
         setupTableView()
-        setupGoBackButton()
     }
     
     private func setupTableView() {
@@ -216,7 +217,7 @@ final class AdminChatViewController: UIViewController, AdminChatDisplayLogic {
         goBackButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
     }
     
-    private func setupAdminTitle() {
+    private func setupAdminViewTitle() {
         viewAdminTitle.backgroundColor = Constants.viewAdminTitleBackgroundColor
         
         view.addSubview(viewAdminTitle)
@@ -224,21 +225,28 @@ final class AdminChatViewController: UIViewController, AdminChatDisplayLogic {
         viewAdminTitle.pinTop(to: view.topAnchor)
         viewAdminTitle.pinLeft(to: view.leadingAnchor)
         viewAdminTitle.pinRight(to: view.trailingAnchor)
-        viewAdminTitle.setHeight(Constants.viewAdminTitleHeight)
-        
+    }
+    
+    private func setupAdminTitle() {
         adminTitle.font = Constants.adminTitleFont
         adminTitle.textColor = Constants.adminTitleTextColor
-        adminTitle.text = Constants.adminTitleText
+        adminTitle.text = chat?.userFullName
+        adminTitle.textAlignment = .center
+        adminTitle.numberOfLines = 0
         
         viewAdminTitle.addSubview(adminTitle)
         
         adminTitle.pinTop(to: viewAdminTitle.safeAreaLayoutGuide.topAnchor, Constants.adminTitleTop)
-        adminTitle.pinCenterX(to: viewAdminTitle.centerXAnchor)
+        adminTitle.pinLeft(to: goBackButton.trailingAnchor, 5)
+        adminTitle.pinRight(to: viewAdminTitle.trailingAnchor, 15)
+        
+        viewAdminTitle.pinBottom(to: adminTitle.bottomAnchor, -10)
+        
     }
     
     // MARK: - Load Messages
     private func loadMessages() {
-        guard let chatId = chatId else { return }
+        guard let chatId = chat?.chatId else { return }
         
         db.collection("chats").document(chatId).collection("messages")
             .order(by: "timestamp")
@@ -287,7 +295,7 @@ final class AdminChatViewController: UIViewController, AdminChatDisplayLogic {
         let senderId = user.uid
         
         // Проверяем, что chatId и text не nil
-        guard let chatId = chatId,
+        guard let chatId = chat?.chatId,
               let text = messageTextField.text, !text.isEmpty else {
             print(Constants.emptyMessageError)
             showError(message: Constants.emptyMessageError)

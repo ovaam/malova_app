@@ -179,8 +179,8 @@ final class AdminChatListViewController: UIViewController, AdminChatListDisplayL
     }
     
     // MARK: - Open Chat
-    private func openChat(chatId: String) {
-        router.routeToChat(chatId: chatId)
+    private func openChat(chat: Chat) {
+        router.routeToChat(chat: chat)
     }
     
     // MARK: - Actions
@@ -221,6 +221,6 @@ extension AdminChatListViewController: UITableViewDelegate, UITableViewDataSourc
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let chat = chats[indexPath.row]
-        openChat(chatId: chat.chatId)
+        openChat(chat: chat)
     }
 }
