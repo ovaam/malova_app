@@ -44,15 +44,15 @@ final class UserChatViewController: UIViewController, UserChatDisplayLogic {
         static let goBackButtonImage: UIImage = UIImage(systemName: "chevron.left") ?? UIImage()
 
         static let tableViewHeight: Double = 80
-        static let inputContainerHeight: Double = 80
+        static let inputContainerHeight: Double = 50
         static let messageTextLeft: Double = 16
         static let messageTextRight: Double = 100
-        static let messageTextTop: Double = 15
-        static let messageTextBottom: Double = 15
+        static let messageTextTop: Double = 8
+        static let messageTextBottom: Double = 8
         static let sendButtonCornerRadius: Double = 8
         static let sendButtonRight: Double = 16
-        static let sendButtonTop: Double = 15
-        static let sendButtonBottom: Double = 15
+        static let sendButtonTop: Double = 8
+        static let sendButtonBottom: Double = 8
         static let sendButtonWidth: Double = 80
         static let goBackButtonTop: Double = 16
         static let goBackButtonLeft: Double = 16

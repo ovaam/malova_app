@@ -294,7 +294,11 @@ final class SingInViewController: UIViewController, SingInDisplayLogic {
         
         loginUser(email: email, password: password) { success, errorMessage in
             if success {
-                self.router.routeToMain()
+                if email == "ovaam231323@mail.ru" {
+                    self.router.routeToAdminChatList()
+                } else {
+                    self.router.routeToMain()
+                }
             } else {
                 self.showError(message: errorMessage ?? Constants.authErrorMessage)
             }

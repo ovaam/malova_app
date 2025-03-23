@@ -125,8 +125,14 @@ class WelcomeViewController: UIViewController, WelcomeDisplayLogic, UIGestureRec
 
     @objc func startButtonTapped() {
         if Auth.auth().currentUser != nil {
-            // Если пользователь уже авторизован, переходим на главный экран
-            router?.routeToMain()
+            let userEmail = Auth.auth().currentUser?.email ?? ""
+                    
+            // Проверяем, является ли пользователь администратором
+            if userEmail == "ovaam231323@mail.ru" {
+                router?.routeToAdminChatList()
+            } else {
+                router?.routeToMain()
+            }
         } else {
             router?.routeToSingIn()
         }

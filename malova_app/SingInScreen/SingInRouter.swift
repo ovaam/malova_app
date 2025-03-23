@@ -37,6 +37,7 @@ import UIKit
 protocol SingInRoutingLogic {
     func routeToMain()
     func routeToRegistration()
+    func routeToAdminChatList()
 }
 
 final class SingInRouter: SingInRoutingLogic {
@@ -49,6 +50,11 @@ final class SingInRouter: SingInRoutingLogic {
     
     func routeToRegistration() {
         let nextVC = LogInAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    func routeToAdminChatList() {
+        let nextVC = AdminChatListAssembly.build()
         view?.navigationController?.pushViewController(nextVC, animated: true)
     }
 }

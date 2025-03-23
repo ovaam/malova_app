@@ -9,6 +9,7 @@ import UIKit
 protocol WelcomeRoutingLogic {
     func routeToSingIn()
     func routeToMain()
+    func routeToAdminChatList()
 }
 
 final class WelcomeRouter: WelcomeRoutingLogic {
@@ -21,6 +22,11 @@ final class WelcomeRouter: WelcomeRoutingLogic {
     
     func routeToMain() {
         let nextVC = MainAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    func routeToAdminChatList() {
+        let nextVC = AdminChatListAssembly.build()
         view?.navigationController?.pushViewController(nextVC, animated: true)
     }
 }

@@ -29,6 +29,8 @@ final class AdminChatListViewController: UIViewController, AdminChatListDisplayL
         
         static let whiteColor: UIColor = .white
         static let blackColor: UIColor = .black
+        static let backgroundColor: UIColor = UIColor(hex: "EAEAEA") ?? UIColor()
+        static let logoutButtonBackground: UIColor = UIColor(hex: "647269") ?? UIColor()
         
         static let titleText: String = "Чаты"
         static let backButtonImageName: String = "chevron.left"
@@ -56,6 +58,7 @@ final class AdminChatListViewController: UIViewController, AdminChatListDisplayL
     }()
     
     private let goBackButton: UIButton = UIButton()
+    private let logoutButton: UIButton = UIButton()
     
     // MARK: - LifeCycle
     init(
@@ -74,21 +77,22 @@ final class AdminChatListViewController: UIViewController, AdminChatListDisplayL
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = Constants.backgroundColor
         interactor.loadStart(Model.Start.Request())
-        setupGoBackButton()
+        //setupGoBackButton()
+        setupLogoutButton()
         setupUI()
         loadChats()
     }
     
     // MARK: - Configuration
     private func setupUI() {
-        view.backgroundColor = Constants.whiteColor
-        title = Constants.titleText
+        //title = Constants.titleText
         
         // Добавляем таблицу
         view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.pinTop(to: goBackButton.bottomAnchor)
+        tableView.backgroundColor = Constants.backgroundColor
+        tableView.pinTop(to: logoutButton.bottomAnchor)
         tableView.pinLeft(to: view.leadingAnchor)
         tableView.pinRight(to: view.trailingAnchor)
         tableView.pinBottom(to: view.bottomAnchor)
@@ -108,6 +112,21 @@ final class AdminChatListViewController: UIViewController, AdminChatListDisplayL
         goBackButton.pinLeft(to: view.leadingAnchor, Constants.backButtonLeftOffset)
         
         goBackButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+    }
+    
+    private func setupLogoutButton() {
+        logoutButton.setTitle("Выйти", for: .normal)
+        logoutButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Medium", size: 20)
+        //logoutButton.tintColor = .red
+        logoutButton.backgroundColor = Constants.logoutButtonBackground
+        logoutButton.layer.cornerRadius = 15
+        logoutButton.titleLabel?.textColor = .red
+        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        
+        view.addSubview(logoutButton)
+        
+        logoutButton.pinTop(to: view.safeAreaLayoutGuide.topAnchor, 10)
+        logoutButton.pinLeft(to: view.leadingAnchor, 10)
     }
     
     // MARK: - Load Chats
@@ -161,14 +180,23 @@ final class AdminChatListViewController: UIViewController, AdminChatListDisplayL
     
     // MARK: - Open Chat
     private func openChat(chatId: String) {
-        let chatVC = AdminChatAssembly.build(chatId: chatId)
-        navigationController?.pushViewController(chatVC, animated: true)
+        router.routeToChat(chatId: chatId)
     }
     
     // MARK: - Actions
     @objc
     private func backButtonTapped() {
         router.routeToMain()
+    }
+    
+    @objc
+    private func logoutButtonTapped() {
+        do {
+            try Auth.auth().signOut()
+            router.routeToWelcome()
+        } catch let signOutError as NSError {
+            print("Ошибка при выходе из аккаунта: \(signOutError.localizedDescription)")
+        }
     }
     
     // MARK: - DisplayLogic
@@ -186,7 +214,8 @@ extension AdminChatListViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellIdentifier, for: indexPath)
         let chat = chats[indexPath.row]
-        cell.textLabel?.text = chat.userFullName // Отображаем ФИО пользователя
+        cell.textLabel?.text = chat.userFullName
+        cell.backgroundColor = Constants.backgroundColor
         return cell
     }
 
