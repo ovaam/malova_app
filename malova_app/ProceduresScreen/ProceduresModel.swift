@@ -43,3 +43,20 @@ struct ProcedureCategory {
     let type: String
     var procedures: [Procedure]
 }
+
+class Cart {
+    static let shared = Cart() // Тот самый случай с полезностью синглтона
+    var procedures: [Procedure] = []
+    
+    func addProcedure(_ procedure: Procedure) {
+        procedures.append(procedure)
+    }
+    
+    func removeProcedure(at index: Int) {
+        procedures.remove(at: index)
+    }
+    
+    func clearCart() {
+        procedures.removeAll()
+    }
+}

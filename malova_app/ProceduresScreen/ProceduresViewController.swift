@@ -40,6 +40,7 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
     
     private let malovaLabel: UILabel = UILabel()
     private let goBackButton: UIButton = UIButton()
+    private let cartButton: UIButton = UIButton()
     
     // MARK: - LifeCycle
     init(
@@ -63,6 +64,7 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
         view.backgroundColor = UIColor(hex: "EAEAEA")
         
         setupLabel()
+        setupCartButton()
         setupSearchBar()
         setupTableView()
         setupGoBackButton()
@@ -81,7 +83,6 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
         
         malovaLabel.pinTop(to: view.topAnchor, 80)
         malovaLabel.pinRight(to: view.trailingAnchor, 15)
-        //malovaLabel.pinBottom(to: view.bottomAnchor, 600)
     }
     
     private func setupGoBackButton() {
@@ -96,21 +97,20 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
         goBackButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
     }
     
-    // Настройка поиска
     private func setupSearchBar() {
         searchBar.placeholder = "Поиск процедуры"
         searchBar.delegate = self
         searchBar.barTintColor = UIColor(hex: "EAEAEA")
+        searchBar.searchTextField.font = UIFont(name: "TimesNewRomanPSMT", size: 16)
         searchBar.searchTextField.backgroundColor = UIColor.white.withAlphaComponent(0.3)
         
         view.addSubview(searchBar)
         
-        searchBar.pinTop(to: malovaLabel.bottomAnchor)
+        searchBar.pinTop(to: cartButton.bottomAnchor)
         searchBar.pinLeft(to: view.leadingAnchor)
         searchBar.pinRight(to: view.trailingAnchor)
     }
     
-    // Настройка таблицы
     private func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
@@ -118,11 +118,28 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
         
         view.addSubview(tableView)
         tableView.backgroundColor = UIColor(hex: "EAEAEA")
+        tableView.separatorStyle = .none
         
         tableView.pinTop(to: searchBar.bottomAnchor)
         tableView.pinLeft(to: view.leadingAnchor)
         tableView.pinRight(to: view.trailingAnchor)
         tableView.pinBottom(to: view.bottomAnchor)
+    }
+    
+    private func setupCartButton() {
+        cartButton.setTitle("Корзина", for: .normal)
+        cartButton.titleLabel?.font = UIFont(name: "TimesNewRomanPSMT", size: 15)
+        cartButton.tintColor = UIColor(hex: "313638")
+        cartButton.backgroundColor = UIColor(hex: "647269")
+        cartButton.layer.cornerRadius = 10
+        cartButton.addTarget(self, action: #selector(cartButtonTapped), for: .touchUpInside)
+        
+        view.addSubview(cartButton)
+        
+        cartButton.pinTop(to: malovaLabel.bottomAnchor, 10)
+        cartButton.pinRight(to: view.trailingAnchor, 25)
+        cartButton.setHeight(20)
+        cartButton.setWidth(100)
     }
     
     // Загрузка данных из Firestore
@@ -190,11 +207,19 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
     }
     
     // MARK: - Actions
-    @objc
-    private func backButtonTapped() {
+    @objc private func backButtonTapped() {
         router.routeToMain()
     }
     
+    @objc private func cartButtonTapped() {
+        let cartVC = CartViewController()
+        
+        cartVC.modalPresentationStyle = .overCurrentContext
+        cartVC.modalTransitionStyle = .crossDissolve
+        
+        present(cartVC, animated: true, completion: nil)
+    }
+
     // MARK: - DisplayLogic
     func displayStart(_ viewModel: Model.Start.ViewModel) {
         // Обработка данных для отображения
@@ -217,8 +242,8 @@ extension ProceduresViewController: UITableViewDataSource {
             cell.textLabel?.text = procedure.name
             cell.backgroundColor = UIColor(hex: "EAEAEA")
             cell.textLabel?.textColor = UIColor(hex: "313638")
-            cell.textLabel?.font = UIFont(name: "TimesNewRomanPSMT", size: 16)
-            cell.textLabel?.textAlignment = .left // Выравнивание текста справа
+            cell.textLabel?.font = UIFont(name: "TimesNewRomanPSMT", size: 20)
+            cell.textLabel?.textAlignment = .left
         }
         return cell
     }
@@ -233,7 +258,7 @@ extension ProceduresViewController: UITableViewDelegate {
         let label = UILabel()
         label.text = filteredCategories?[section].type
         label.textColor = UIColor(hex: "313638")
-        label.font = UIFont(name: "TimesNewRomanPSMT", size: 24)
+        label.font = UIFont(name: "TimesNewRomanPSMT", size: 30)
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -250,7 +275,7 @@ extension ProceduresViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
+        return 50
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -274,92 +299,5 @@ extension ProceduresViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder() // Скрываем клавиатуру
-    }
-}
-
-class DetailAboutProcedureViewController: UIViewController {
-    
-    var procedure: Procedure?
-    
-    private let containerView: UIView = UIView()
-    private let titleLabel: UILabel = UILabel()
-    private let infoLabel: UILabel = UILabel()
-    private let closeButton: UIButton = UIButton(type: .system)
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Настройка фона с размытием
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        
-        setupContainerView()
-        setupLable()
-        setupInfoLabel()
-        setupCloseButton()
-        
-        if let procedure = procedure {
-            infoLabel.text = """
-            \(procedure.type)
-            Названние: \(procedure.name)
-            Исполнитель: \(procedure.performer)
-            Цена: \(procedure.price) руб.
-            Время: \(procedure.duration)
-            """
-        }
-        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
-    }
-    
-    private func setupContainerView() {
-        containerView.backgroundColor = UIColor(hex: "647269")
-        containerView.layer.cornerRadius = 12
-        containerView.layer.masksToBounds = true
-        
-        view.addSubview(containerView)
-        
-        containerView.pinCenterX(to: view.centerXAnchor)
-        containerView.pinCenterY(to: view.centerYAnchor)
-        containerView.setWidth(300)
-        containerView.setHeight(250)
-    }
-    
-    private func setupLable() {
-        titleLabel.textColor = .white
-        titleLabel.text = "Информация о процедуре"
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        titleLabel.textAlignment = .center
-        
-        containerView.addSubview(titleLabel)
-        
-        titleLabel.pinTop(to: containerView.topAnchor, 16)
-        titleLabel.pinLeft(to: containerView.leadingAnchor, 16)
-        titleLabel.pinRight(to: containerView.trailingAnchor, 16)
-    }
-    
-    private func setupInfoLabel() {
-        infoLabel.textColor = .white
-        infoLabel.numberOfLines = 0
-        infoLabel.textAlignment = .center
-        infoLabel.font = UIFont.systemFont(ofSize: 16)
-        
-        containerView.addSubview(infoLabel)
-        
-        infoLabel.pinTop(to: titleLabel.bottomAnchor, 16)
-        infoLabel.pinLeft(to: containerView.leadingAnchor, 16)
-        infoLabel.pinRight(to: containerView.trailingAnchor, 16)
-    }
-    
-    private func setupCloseButton() {
-        closeButton.tintColor = .black
-        closeButton.setTitle("Закрыть", for: .normal)
-        closeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        
-        containerView.addSubview(closeButton)
-        
-        closeButton.pinBottom(to: containerView.bottomAnchor, 16)
-        closeButton.pinCenterX(to: containerView.centerXAnchor)
-    }
-    
-    @objc private func closeButtonTapped() {
-        dismiss(animated: true, completion: nil)
     }
 }

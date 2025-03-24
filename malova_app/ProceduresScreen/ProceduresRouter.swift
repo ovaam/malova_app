@@ -9,6 +9,7 @@ import UIKit
 
 protocol ProceduresRoutingLogic {
     func routeToMain()
+    func routeToCart()
 }
 
 final class ProceduresRouter: ProceduresRoutingLogic {
@@ -16,6 +17,11 @@ final class ProceduresRouter: ProceduresRoutingLogic {
     
     func routeToMain() {
         let nextVC = MainAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    func routeToCart() {
+        let nextVC = CartViewController()
         view?.navigationController?.pushViewController(nextVC, animated: true)
     }
 }
