@@ -10,6 +10,7 @@ import UIKit
 protocol ProceduresRoutingLogic {
     func routeToMain()
     func routeToCart()
+    func routeToProcedureDetail(procedure: Procedure)
 }
 
 final class ProceduresRouter: ProceduresRoutingLogic {
@@ -21,7 +22,19 @@ final class ProceduresRouter: ProceduresRoutingLogic {
     }
     
     func routeToCart() {
-        let nextVC = CartViewController()
-        view?.navigationController?.pushViewController(nextVC, animated: true)
+        let cartVC = CartViewController()
+        
+        cartVC.modalPresentationStyle = .overCurrentContext
+        cartVC.modalTransitionStyle = .crossDissolve
+        
+        view?.present(cartVC, animated: true, completion: nil)
+    }
+    
+    func routeToProcedureDetail(procedure: Procedure) {
+        let detailVC = DetailAboutProcedureViewController()
+        detailVC.procedure = procedure
+        detailVC.modalPresentationStyle = .overCurrentContext
+        detailVC.modalTransitionStyle = .crossDissolve
+        view?.present(detailVC, animated: true)
     }
 }

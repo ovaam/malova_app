@@ -9,15 +9,9 @@ import UIKit
 import FirebaseFirestore
 
 protocol ProceduresDisplayLogic: AnyObject {
-    typealias Model = ProceduresModel
-    func displayStart(_ viewModel: Model.Start.ViewModel)
-    // func display(_ viewModel: Model..ViewModel)
-}
-
-protocol ProceduresAnalitics: AnyObject {
-    typealias Model = ProceduresModel
-    func logStart(_ info: Model.Start.Info)
-    // func log(_ viewModel: Model..Info)
+    func displayProcedures(viewModel: ProceduresModel.LoadProcedures.ViewModel)
+    func displayFilteredProcedures(viewModel: ProceduresModel.FilterProcedures.ViewModel)
+    func displayError(message: String)
 }
 
 final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
@@ -26,6 +20,40 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
         static let fatalError: String = "init(coder:) has not been implemented"
         static let cellIdentifier: String = "cell"
         static let collectionName: String = "procedures"
+        
+        static let backgroundColor: UIColor = UIColor(hex: "EAEAEA") ?? UIColor()
+        static let textColor: UIColor = UIColor(hex: "313638") ?? UIColor()
+        static let buttonColor: UIColor = UIColor(hex: "647269") ?? UIColor()
+        static let searchFieldBackground: UIColor = UIColor.white.withAlphaComponent(0.3)
+        
+        static let labelFont: UIFont = UIFont(name: "TimesNewRomanPSMT", size: 100) ?? UIFont()
+        static let headerFont: UIFont = UIFont(name: "TimesNewRomanPSMT", size: 30) ?? UIFont()
+        static let cellFont: UIFont = UIFont(name: "TimesNewRomanPSMT", size: 20) ?? UIFont()
+        static let searchFont: UIFont = UIFont(name: "TimesNewRomanPSMT", size: 16) ?? UIFont()
+        static let cartButtonFont: UIFont = UIFont(name: "TimesNewRomanPSMT", size: 15) ?? UIFont()
+        
+        static let labelText: String = "Malova"
+        static let searchPlaceholder: String = "Поиск процедуры"
+        static let cartButtonTitle: String = "Корзина"
+        static let backButtonImageName: String = "chevron.left"
+        
+        static let labelTop: Double = 80
+        static let labelRight: Double = 15
+        
+        static let backButtonTop: Double = 45
+        static let backButtonLeft: Double = 25
+        
+        static let cartButtonTop: Double = 10
+        static let cartButtonRight: Double = 25
+        static let cartButtonHeight: Double = 20
+        static let cartButtonWidth: Double = 100
+        static let cartButtonCornerRadius: Double = 10
+        
+        static let headerHeight: Double = 50
+        static let headerTop: Double = 8
+        static let headerBottom: Double = 8
+        static let headerLeft: Double = 16
+        static let headerRight: Double = 16
     }
     
     // MARK: - Fields
@@ -34,9 +62,9 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
     private let db = Firestore.firestore()
     
     var categories: [ProcedureCategory]?
-    var filteredCategories: [ProcedureCategory]? // Для фильтрации
+    var filteredCategories: [ProcedureCategory]?
     let tableView = UITableView()
-    private let searchBar = UISearchBar() // Поле для поиска
+    private let searchBar = UISearchBar()
     
     private let malovaLabel: UILabel = UILabel()
     private let goBackButton: UIButton = UIButton()
@@ -59,50 +87,50 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        interactor.loadStart(Model.Start.Request())
-        
-        view.backgroundColor = UIColor(hex: "EAEAEA")
+        setupUI()
+        loadProcedures()
+    }
+    
+    // MARK: - Configuration
+    private func setupUI() {
+        view.backgroundColor = Constants.backgroundColor
         
         setupLabel()
         setupCartButton()
         setupSearchBar()
         setupTableView()
         setupGoBackButton()
-        
-        // Загружаем данные из Firestore
-        loadProceduresFromFirestore()
     }
     
-    // MARK: - Configuration
     private func setupLabel() {
         malovaLabel.textColor = .white
-        malovaLabel.font = UIFont(name: "TimesNewRomanPSMT", size: 100)
-        malovaLabel.text = "Malova"
+        malovaLabel.font = Constants.labelFont
+        malovaLabel.text = Constants.labelText
         
         view.addSubview(malovaLabel)
         
-        malovaLabel.pinTop(to: view.topAnchor, 80)
-        malovaLabel.pinRight(to: view.trailingAnchor, 15)
+        malovaLabel.pinTop(to: view.topAnchor, Constants.labelTop)
+        malovaLabel.pinRight(to: view.trailingAnchor, Constants.labelRight)
     }
     
     private func setupGoBackButton() {
-        goBackButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        goBackButton.setImage(UIImage(systemName: Constants.backButtonImageName), for: .normal)
         goBackButton.tintColor = .black
         
         view.addSubview(goBackButton)
         
-        goBackButton.pinTop(to: view.topAnchor, 45)
-        goBackButton.pinLeft(to: view.leadingAnchor, 25)
+        goBackButton.pinTop(to: view.topAnchor, Constants.backButtonTop)
+        goBackButton.pinLeft(to: view.leadingAnchor, Constants.backButtonLeft)
         
         goBackButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
     }
     
     private func setupSearchBar() {
-        searchBar.placeholder = "Поиск процедуры"
+        searchBar.placeholder = Constants.searchPlaceholder
         searchBar.delegate = self
-        searchBar.barTintColor = UIColor(hex: "EAEAEA")
-        searchBar.searchTextField.font = UIFont(name: "TimesNewRomanPSMT", size: 16)
-        searchBar.searchTextField.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+        searchBar.barTintColor = Constants.backgroundColor
+        searchBar.searchTextField.font = Constants.searchFont
+        searchBar.searchTextField.backgroundColor = Constants.searchFieldBackground
         
         view.addSubview(searchBar)
         
@@ -117,7 +145,7 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.cellIdentifier)
         
         view.addSubview(tableView)
-        tableView.backgroundColor = UIColor(hex: "EAEAEA")
+        tableView.backgroundColor = Constants.backgroundColor
         tableView.separatorStyle = .none
         
         tableView.pinTop(to: searchBar.bottomAnchor)
@@ -127,83 +155,24 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
     }
     
     private func setupCartButton() {
-        cartButton.setTitle("Корзина", for: .normal)
-        cartButton.titleLabel?.font = UIFont(name: "TimesNewRomanPSMT", size: 15)
-        cartButton.tintColor = UIColor(hex: "313638")
-        cartButton.backgroundColor = UIColor(hex: "647269")
-        cartButton.layer.cornerRadius = 10
+        cartButton.setTitle(Constants.cartButtonTitle, for: .normal)
+        cartButton.titleLabel?.font = Constants.cartButtonFont
+        cartButton.tintColor = Constants.textColor
+        cartButton.backgroundColor = Constants.buttonColor
+        cartButton.layer.cornerRadius = Constants.cartButtonCornerRadius
         cartButton.addTarget(self, action: #selector(cartButtonTapped), for: .touchUpInside)
         
         view.addSubview(cartButton)
         
-        cartButton.pinTop(to: malovaLabel.bottomAnchor, 10)
-        cartButton.pinRight(to: view.trailingAnchor, 25)
-        cartButton.setHeight(20)
-        cartButton.setWidth(100)
+        cartButton.pinTop(to: malovaLabel.bottomAnchor, Constants.cartButtonTop)
+        cartButton.pinRight(to: view.trailingAnchor, Constants.cartButtonRight)
+        cartButton.setHeight(Constants.cartButtonHeight)
+        cartButton.setWidth(Constants.cartButtonWidth)
     }
     
-    // Загрузка данных из Firestore
-    private func loadProceduresFromFirestore() {
-        db.collection(Constants.collectionName).getDocuments { [weak self] snapshot, error in
-            guard let self = self else { return }
-            
-            if let error = error {
-                print("Ошибка загрузки процедур: \(error.localizedDescription)")
-                return
-            }
-            
-            guard let documents = snapshot?.documents else {
-                print("Документы не найдены")
-                return
-            }
-            
-            // Преобразуем документы в массив процедур
-            let procedures = documents.compactMap { document -> Procedure? in
-                let data = document.data()
-                guard let type = data["type"] as? String,
-                      let name = data["name"] as? String,
-                      let performer = data["performer"] as? String,
-                      let price = data["price"] as? Int,
-                      let duration = data["duration"] as? String else {
-                    return nil
-                }
-                return Procedure(type: type, performer: performer, name: name, price: price, duration: duration)
-            }
-            
-            // Группируем процедуры по типу
-            let groupedProcedures = Dictionary(grouping: procedures, by: { $0.type })
-            
-            // Создаем категории
-            self.categories = groupedProcedures.map { ProcedureCategory(type: $0.key, procedures: $0.value) }
-                .sorted { $0.type < $1.type } // Сортировка по алфавиту
-            
-            // Сортируем процедуры внутри каждой категории
-            for i in 0..<(self.categories?.count ?? 0) {
-                self.categories?[i].procedures.sort { $0.name < $1.name }
-            }
-            
-            // Сохраняем отфильтрованные данные
-            self.filteredCategories = self.categories
-            
-            // Обновляем таблицу
-            self.tableView.reloadData()
-        }
-    }
-    
-    // Фильтрация данных
-    private func filterProcedures(with searchText: String) {
-        if searchText.isEmpty {
-            filteredCategories = categories
-        } else {
-            filteredCategories = categories?.compactMap { category in
-                let filteredProcedures = category.procedures.filter {
-                    $0.name.localizedCaseInsensitiveContains(searchText) ||
-                    $0.type.localizedCaseInsensitiveContains(searchText)
-                }
-                return filteredProcedures.isEmpty ? nil : ProcedureCategory(type: category.type, procedures: filteredProcedures)
-            }
-        }
-        tableView.reloadData()
+    private func loadProcedures() {
+        let request = ProceduresModel.LoadProcedures.Request()
+        interactor.loadProcedures(request: request)
     }
     
     // MARK: - Actions
@@ -212,17 +181,23 @@ final class ProceduresViewController: UIViewController, ProceduresDisplayLogic {
     }
     
     @objc private func cartButtonTapped() {
-        let cartVC = CartViewController()
-        
-        cartVC.modalPresentationStyle = .overCurrentContext
-        cartVC.modalTransitionStyle = .crossDissolve
-        
-        present(cartVC, animated: true, completion: nil)
+        router.routeToCart()
     }
 
     // MARK: - DisplayLogic
-    func displayStart(_ viewModel: Model.Start.ViewModel) {
-        // Обработка данных для отображения
+    func displayProcedures(viewModel: ProceduresModel.LoadProcedures.ViewModel) {
+        categories = viewModel.categories
+        filteredCategories = viewModel.categories
+        tableView.reloadData()
+    }
+        
+    func displayFilteredProcedures(viewModel: ProceduresModel.FilterProcedures.ViewModel) {
+        filteredCategories = viewModel.filteredCategories
+        tableView.reloadData()
+    }
+        
+    func displayError(message: String) {
+        print(message)
     }
 }
 
@@ -240,9 +215,9 @@ extension ProceduresViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellIdentifier, for: indexPath)
         if let procedure = filteredCategories?[indexPath.section].procedures[indexPath.row] {
             cell.textLabel?.text = procedure.name
-            cell.backgroundColor = UIColor(hex: "EAEAEA")
-            cell.textLabel?.textColor = UIColor(hex: "313638")
-            cell.textLabel?.font = UIFont(name: "TimesNewRomanPSMT", size: 20)
+            cell.backgroundColor = Constants.backgroundColor
+            cell.textLabel?.textColor = Constants.textColor
+            cell.textLabel?.font = Constants.cellFont
             cell.textLabel?.textAlignment = .left
         }
         return cell
@@ -253,40 +228,31 @@ extension ProceduresViewController: UITableViewDataSource {
 extension ProceduresViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
-        headerView.backgroundColor = UIColor(hex: "EAEAEA")
+        headerView.backgroundColor = Constants.backgroundColor
         
         let label = UILabel()
         label.text = filteredCategories?[section].type
-        label.textColor = UIColor(hex: "313638")
-        label.font = UIFont(name: "TimesNewRomanPSMT", size: 30)
+        label.textColor = Constants.textColor
+        label.font = Constants.headerFont
         label.textAlignment = .left
-        label.translatesAutoresizingMaskIntoConstraints = false
         
         headerView.addSubview(label)
         
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-            label.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
-            label.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 8),
-            label.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -8)
-        ])
+        label.pinLeft(to: headerView.leadingAnchor, Constants.headerLeft)
+        label.pinRight(to: headerView.trailingAnchor, Constants.headerRight)
+        label.pinTop(to: headerView.topAnchor, Constants.headerTop)
+        label.pinBottom(to: headerView.bottomAnchor, Constants.headerBottom)
         
         return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
+        return Constants.headerHeight
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let procedure = filteredCategories?[indexPath.section].procedures[indexPath.row] {
-            let detailVC = DetailAboutProcedureViewController()
-            detailVC.procedure = procedure
-            
-            detailVC.modalPresentationStyle = .overCurrentContext
-            detailVC.modalTransitionStyle = .crossDissolve
-            
-            present(detailVC, animated: true, completion: nil)
+            router.routeToProcedureDetail(procedure: procedure)
         }
     }
 }
@@ -294,10 +260,11 @@ extension ProceduresViewController: UITableViewDelegate {
 // MARK: - UISearchBarDelegate
 extension ProceduresViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filterProcedures(with: searchText)
+        let request = ProceduresModel.FilterProcedures.Request(searchText: searchText)
+        interactor.filterProcedures(request: request)
     }
-    
+        
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder() // Скрываем клавиатуру
+        searchBar.resignFirstResponder()
     }
 }

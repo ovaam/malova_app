@@ -8,21 +8,26 @@
 import UIKit
 
 protocol ProceduresPresentationLogic {
-    typealias Model = ProceduresModel
-    func presentStart(_ response: Model.Start.Response)
-    // func present(_ response: Model..Response)
+    func presentProcedures(response: ProceduresModel.LoadProcedures.Response)
+    func presentFilteredProcedures(response: ProceduresModel.FilterProcedures.Response)
+    func presentError(error: Error)
 }
 
 final class ProceduresPresenter: ProceduresPresentationLogic {
-    // MARK: - Constants
-    private enum Constants {
-        
-    }
-    
     weak var view: ProceduresDisplayLogic?
     
     // MARK: - PresentationLogic
-    func presentStart(_ response: Model.Start.Response) {
-        view?.displayStart(Model.Start.ViewModel())
+    func presentProcedures(response: ProceduresModel.LoadProcedures.Response) {
+        let viewModel = ProceduresModel.LoadProcedures.ViewModel(categories: response.categories)
+        view?.displayProcedures(viewModel: viewModel)
+    }
+        
+    func presentFilteredProcedures(response: ProceduresModel.FilterProcedures.Response) {
+        let viewModel = ProceduresModel.FilterProcedures.ViewModel(filteredCategories: response.filteredCategories)
+        view?.displayFilteredProcedures(viewModel: viewModel)
+    }
+        
+    func presentError(error: Error) {
+        view?.displayError(message: error.localizedDescription)
     }
 }

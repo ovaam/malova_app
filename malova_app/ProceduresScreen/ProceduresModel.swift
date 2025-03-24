@@ -8,38 +8,38 @@
 import UIKit
 
 enum ProceduresModel {
-    enum Start {
-        struct Request { }
-        struct Response { }
-        struct ViewModel { }
-        struct Info { }
+    struct LoadProcedures {
+        struct Request {}
+        struct Response {
+            let categories: [ProcedureCategory]
+        }
+        struct ViewModel {
+            let categories: [ProcedureCategory]
+        }
     }
     
-    //    enum Other {
-    //        struct Request { }
-    //        struct Response { }
-    //        struct ViewModel { }
-    //        struct Info { }
-    //    }
+    struct FilterProcedures {
+        struct Request {
+            let searchText: String
+        }
+        struct Response {
+            let filteredCategories: [ProcedureCategory]
+        }
+        struct ViewModel {
+            let filteredCategories: [ProcedureCategory]
+        }
+    }
 }
-struct Procedure: Codable {
+
+struct Procedure {
     let type: String
     let performer: String
     let name: String
     let price: Int
     let duration: String
-    
-    // Используем CodingKeys для соответствия ключей в JSON и свойств структуры
-    enum CodingKeys: String, CodingKey {
-        case type = "Тип процедуры"
-        case performer = "процедуру выполняет:"
-        case name = "Наименование"
-        case price = "Цена(руб)"
-        case duration = "Время"
-    }
 }
 
 struct ProcedureCategory {
     let type: String
-    var procedures: [Procedure]
+    let procedures: [Procedure]
 }
