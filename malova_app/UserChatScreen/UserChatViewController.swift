@@ -10,15 +10,12 @@ import FirebaseFirestore
 import FirebaseAuth
 
 protocol UserChatDisplayLogic: AnyObject {
-    typealias Model = UserChatModel
-    func displayStart(_ viewModel: Model.Start.ViewModel)
-    // func display(_ viewModel: Model..ViewModel)
-}
-
-protocol UserChatAnalitics: AnyObject {
-    typealias Model = UserChatModel
-    func logStart(_ info: Model.Start.Info)
-    // func log(_ viewModel: Model..Info)
+    func displayMessages(viewModel: UserChatModel.LoadMessages.ViewModel)
+    func displayMessageSent()
+    func displayChatCreated(viewModel: UserChatModel.CreateChat.ViewModel)
+    func updateInputContainer(for keyboardHeight: CGFloat, duration: TimeInterval)
+    func displayError(message: String)
+    func resetInputContainer(duration: TimeInterval)
 }
 
 
@@ -33,15 +30,24 @@ final class UserChatViewController: UIViewController, UserChatDisplayLogic {
         static let goBackButtonTintColor: UIColor = .black
         static let viewAdminTitleBackgroundColor: UIColor = UIColor(hex: "DEE3E0") ?? UIColor()
         static let adminTitleTextColor: UIColor = .black
+        static let addCartButtonColor: UIColor = UIColor(hex: "647269")?.withAlphaComponent(0.3) ?? UIColor()
+        static let addCartButtonTextColor: UIColor = .white
+        static let dateColor: UIColor = .lightGray
         
         static let cellIdentifier: String = "MessageCell"
         static let messageTextPlaceholder: String = "Введите сообщение..."
         static let sendButtonText: String = "Отправить"
         static let adminTitleText: String = "Чат с администратором"
+        static let addCardButtonTitle: String = " записаться на выбранные процедуры "
+        static let messageText: String = "Могу ли я записаться на следующие процедуры: "
+        static let dateFormat: String = "d MMMM yyyy"
         
         static let adminTitleFont: UIFont = UIFont(name: "HelveticaNeue-Medium", size: 24) ?? UIFont()
+        static let addCartButtonFont: UIFont = UIFont(name: "HelveticaNeue-Medium", size: 12) ?? UIFont()
+        static let dateFormatFont: UIFont = UIFont.systemFont(ofSize: 14)
         
         static let goBackButtonImage: UIImage = UIImage(systemName: "chevron.left") ?? UIImage()
+        static let cardButtonImage: UIImage = UIImage(named: "CartIcon") ?? UIImage()
 
         static let tableViewHeight: Double = 80
         static let inputContainerHeight: Double = 50
@@ -56,8 +62,16 @@ final class UserChatViewController: UIViewController, UserChatDisplayLogic {
         static let sendButtonWidth: Double = 80
         static let goBackButtonTop: Double = 16
         static let goBackButtonLeft: Double = 16
-        static let viewAdminTitleHeight: Double = 130
+        static let viewAdminTitleHeight: Double = 150
         static let adminTitleTop: Double = 16
+        static let cardButtonTop: Double = 5
+        static let cardButtonRight: Double = 20
+        static let cardButtonWidth: Double = 30
+        static let cardButtonHeight: Double = 30
+        static let addCartButtonCorner: Double = 10
+        static let addCartButtonTop: Double = 10
+        static let addCartButtonRight: Double = 20
+        static let addCartButtonHeight: Double = 20
         
         static let adminId: String = "fmNA1kJrmGUpuaaCuHaOTAVvPJ82" // реальный ID администратора (ovaam231323@mail.ru passwd: 231323)
         static let collectionNameChat: String = "chats"
@@ -77,6 +91,8 @@ final class UserChatViewController: UIViewController, UserChatDisplayLogic {
     private var messages: [Message] = []
     private var chatId: String?
     private var inputContainerBottomConstraint: NSLayoutConstraint?
+    private var messageGroups: [MessageGroup] = []
+    private var cartObservation: NSKeyValueObservation?
     
     private let goBackButton: UIButton = UIButton()
     private let tableView: UITableView = UITableView(frame: .zero, style: .plain)
@@ -85,8 +101,8 @@ final class UserChatViewController: UIViewController, UserChatDisplayLogic {
     private let viewAdminTitle: UIView = UIView()
     private let sendButton: UIButton = UIButton(type: .system)
     private let inputContainer: UIView = UIView()
-    
-    private var messageGroups: [MessageGroup] = []
+    private let cartButton: UIButton = UIButton()
+    private let addCartProceduresButton: UIButton = UIButton()
     
     // MARK: - LifeCycle
     init(
@@ -105,49 +121,30 @@ final class UserChatViewController: UIViewController, UserChatDisplayLogic {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Constants.backgroundColor
-        interactor.loadStart(Model.Start.Request())
-        
         setupUI()
-        createOrLoadChat()
-        
-        // Скрываем клавиатуру при нажатии на экран
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        view.addGestureRecognizer(tapGesture)
-        
-        // Подписываемся на уведомления о клавиатуре
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow(_:)),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide(_:)),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
+        setupKeyboardObservers()
+        loadInitialData()
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Configuration
     private func setupUI() {
+        view.backgroundColor = Constants.backgroundColor
+        
         setupAdminTitle()
         setupMessageInput()
         setupTableView()
         setupGoBackButton()
+        setupCartButton()
+        setupAddCartProceduresButton()
     }
     
     private func setupTableView() {
         tableView.separatorStyle = .none
         tableView.backgroundColor = Constants.backgroundColor
-        //tableView.sectionHeaderTopPadding = 0
         
         view.addSubview(tableView)
         tableView.backgroundColor = Constants.backgroundColor
@@ -157,16 +154,13 @@ final class UserChatViewController: UIViewController, UserChatDisplayLogic {
         tableView.pinRight(to: view.trailingAnchor)
         tableView.pinBottom(to: inputContainer.topAnchor)
         
-        // Регистрируем кастомную ячейку
         tableView.register(MessageCell.self, forCellReuseIdentifier: Constants.cellIdentifier)
 
-        // Настройка таблицы
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
         tableView.backgroundColor = Constants.backgroundColor
 
-        // Настройка автоматической высоты ячеек
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = Constants.tableViewHeight
     }
@@ -242,97 +236,75 @@ final class UserChatViewController: UIViewController, UserChatDisplayLogic {
         adminTitle.pinCenterX(to: viewAdminTitle.centerXAnchor)
     }
     
-    // MARK: - Create or Load Chat
-    private func createOrLoadChat() {
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-        let adminId = Constants.adminId
-        chatId = "\(userId)_\(adminId)"
+    private func setupCartButton() {
+        cartButton.setImage(Constants.cardButtonImage, for: .normal)
         
-        // Проверяем, существует ли чат
-        db.collection(Constants.collectionNameChat).document(chatId!).getDocument { snapshot, error in
-            if let error = error {
-                print("\(Constants.chatLoadError) \(error.localizedDescription)")
-                return
-            }
-            
-            if snapshot?.exists == false {
-                // Создаем новый чат, если он не существует
-                self.db.collection(Constants.collectionNameChat).document(self.chatId!).setData([:]) { error in
-                    if let error = error {
-                        print("\(Constants.chatCreateError) \(error.localizedDescription)")
-                    } else {
-                        self.loadMessages()
-                    }
-                }
-            } else {
-                self.loadMessages()
-            }
-        }
-    }
-
-    // MARK: - Load Messages
-    private func loadMessages() {
-        guard let chatId = chatId else { return }
+        view.addSubview(cartButton)
         
-        db.collection(Constants.collectionNameChat).document(chatId).collection(Constants.collectionNameMessages)
-            .order(by: "timestamp")
-            .addSnapshotListener { snapshot, error in
-                if let error = error {
-                    print("\(Constants.messagesLoadError) \(error.localizedDescription)")
-                    return
-                }
-                
-                // Очищаем массив сообщений перед добавлением новых
-                self.messages.removeAll()
-                
-                self.messages = snapshot?.documents.compactMap { document in
-                    let data = document.data()
-                    guard let senderId = data["senderId"] as? String,
-                          let text = data["text"] as? String,
-                          let timestamp = data["timestamp"] as? Timestamp else { return nil }
-                    return Message(senderId: senderId, text: text, timestamp: timestamp.dateValue())
-                } ?? []
-                
-                // Группируем сообщения по дням
-                self.messageGroups = self.groupMessagesByDate(self.messages)
-                
-                self.tableView.reloadData()
-                self.scrollToBottom(animated: false)
-            }
+        cartButton.pinTop(to: adminTitle.bottomAnchor, Constants.cardButtonTop)
+        cartButton.pinRight(to: view.trailingAnchor, Constants.cardButtonRight)
+        cartButton.setWidth(Constants.cardButtonWidth)
+        cartButton.setHeight(Constants.cardButtonHeight)
+        
+        cartButton.addTarget(self, action: #selector(cartButtonTapped), for: .touchUpInside)
     }
     
-    private func groupMessagesByDate(_ messages: [Message]) -> [MessageGroup] {
-        let groupedMessages = Dictionary(grouping: messages) { (message: Message) -> Date in
-            // Округляем дату до дня (игнорируем время)
-            Calendar.current.startOfDay(for: message.timestamp)
-        }
+    private func setupAddCartProceduresButton() {
+        addCartProceduresButton.setTitle(Constants.addCardButtonTitle, for: .normal)
+        addCartProceduresButton.backgroundColor = Constants.addCartButtonColor
+        addCartProceduresButton.layer.cornerRadius = Constants.addCartButtonCorner
+        addCartProceduresButton.setTitleColor(Constants.adminTitleTextColor, for: .normal)
+        addCartProceduresButton.titleLabel?.font = Constants.addCartButtonFont
         
-        // Преобразуем в массив MessageGroup и сортируем по дате
-        return groupedMessages.map { MessageGroup(date: $0.key, messages: $0.value) }
-            .sorted { $0.date < $1.date }
+        view.addSubview(addCartProceduresButton)
+        
+        addCartProceduresButton.pinTop(to: adminTitle.bottomAnchor, Constants.addCartButtonTop)
+        addCartProceduresButton.pinRight(to: cartButton.leadingAnchor, Constants.addCartButtonRight)
+        addCartProceduresButton.setHeight(Constants.addCartButtonHeight)
+        
+        addCartProceduresButton.addTarget(self, action: #selector(addCartProceduresButtonTapped), for: .touchUpInside)
+    }
+    
+    private func setupKeyboardObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow(_:)),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide(_:)),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        view.addGestureRecognizer(tapGesture)
+    }
+        
+    private func loadInitialData() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        let request = UserChatModel.CreateChat.Request(
+            userId: userId,
+            adminId: Constants.adminId
+        )
+        interactor.createOrLoadChat(request: request)
     }
     
     private func scrollToBottom(animated: Bool = true) {
-        // Проверяем, что таблица обновлена и данные доступны
-        guard !messageGroups.isEmpty else { return }
-        
-        // Получаем индекс последней секции
         let lastSection = messageGroups.count - 1
-        
-        // Проверяем, что секция существует
         guard lastSection >= 0 else { return }
-        
-        // Получаем количество строк в последней секции
+      
         let numberOfRows = messageGroups[lastSection].messages.count
         
-        // Проверяем, что в секции есть строки
         guard numberOfRows > 0 else { return }
         
-        // Создаем индекс последней строки
         let lastRow = numberOfRows - 1
         let indexPath = IndexPath(row: lastRow, section: lastSection)
         
-        // Прокручиваем таблицу к последней строке
         tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
     }
     
@@ -342,87 +314,85 @@ final class UserChatViewController: UIViewController, UserChatDisplayLogic {
               let text = messageTextField.text, !text.isEmpty,
               let senderId = Auth.auth().currentUser?.uid else { return }
         
-        // Отключаем кнопку на время отправки
-        sendButton.isEnabled = false
-        
-        let messageData: [String: Any] = [
-            "senderId": senderId,
-            "text": text,
-            "timestamp": Timestamp(date: Date())
-        ]
-        
-        db.collection(Constants.collectionNameChat).document(chatId).collection(Constants.collectionNameMessages).addDocument(data: messageData) { error in
-            // Включаем кнопку после завершения отправки
-            self.sendButton.isEnabled = true
-            
-            if let error = error {
-                print("\(Constants.messageSendError) \(error.localizedDescription)")
-            } else {
-                self.messageTextField.text = ""
-                
-                // Добавляем новое сообщение в конец массива
-                let newMessage = Message(senderId: senderId, text: text, timestamp: Date())
-                
-                // Проверяем, нет ли уже такого сообщения в массиве
-                if !self.messages.contains(where: { $0.text == newMessage.text && $0.senderId == newMessage.senderId }) {
-                    self.messages.append(newMessage)
-                }
-                
-                // Обновляем таблицу и прокручиваем вниз
-                self.tableView.reloadData()
-                self.scrollToBottom(animated: true)
-            }
-        }
+        let request = UserChatModel.SendMessage.Request(
+            chatId: chatId,
+            text: text,
+            senderId: senderId
+        )
+        interactor.sendMessage(request: request)
     }
     
     @objc private func hideKeyboard() {
         view.endEditing(true)
     }
     
-    @objc
-    private func backButtonTapped() {
+    @objc private func backButtonTapped() {
         router.routeToMain()
     }
     
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        // Получаем информацию о клавиатуре
-        guard let userInfo = notification.userInfo,
-              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
-              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
-            return
-        }
-        
-        // Высота клавиатуры
-        let keyboardHeight = keyboardFrame.height
-        
-        // Обновляем констрейнт inputContainer
-        inputContainerBottomConstraint?.constant = -keyboardHeight + view.safeAreaInsets.bottom
-        
-        // Анимация изменения констрейнта
-        UIView.animate(withDuration: animationDuration) {
-            self.view.layoutIfNeeded()
-        }
+    @objc private func cartButtonTapped() {
+        router.routeToCart()
     }
     
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        // Получаем информацию о клавиатуре
+    @objc private func addCartProceduresButtonTapped() {
+        guard !Cart.shared.procedures.isEmpty else { return }
+        
+        var messageText = Constants.messageText
+        messageText += Cart.shared.procedures.map { $0.name }.joined(separator: ", ")
+        
+        messageTextField.text = messageText
+        sendMessage()
+        Cart.shared.clearCart()
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
-              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
-            return
-        }
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+              let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
         
-        // Возвращаем констрейнт inputContainer в исходное положение
-        inputContainerBottomConstraint?.constant = 0
+        updateInputContainer(for: keyboardFrame.height, duration: duration)
+    }
         
-        // Анимация изменения констрейнта
-        UIView.animate(withDuration: animationDuration) {
-            self.view.layoutIfNeeded()
-        }
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
+        
+        resetInputContainer(duration: duration)
     }
     
     // MARK: - DisplayLogic
-    func displayStart(_ viewModel: Model.Start.ViewModel) {
-        // Обработка данных для отображения
+    func displayMessages(viewModel: UserChatModel.LoadMessages.ViewModel) {
+        messageGroups = viewModel.messageGroups
+        tableView.reloadData()
+        scrollToBottom()
+    }
+        
+    func displayMessageSent() {
+        messageTextField.text = ""
+    }
+        
+    func displayChatCreated(viewModel: UserChatModel.CreateChat.ViewModel) {
+        chatId = viewModel.chatId
+        let request = UserChatModel.LoadMessages.Request(chatId: viewModel.chatId)
+        interactor.loadMessages(request: request)
+    }
+        
+    func displayError(message: String) {
+        print(message)
+    }
+        
+    func updateInputContainer(for keyboardHeight: CGFloat, duration: TimeInterval) {
+        inputContainerBottomConstraint?.constant = -keyboardHeight + view.safeAreaInsets.bottom
+        UIView.animate(withDuration: duration) {
+            self.view.layoutIfNeeded()
+        }
+    }
+        
+    func resetInputContainer(duration: TimeInterval) {
+        inputContainerBottomConstraint?.constant = 0
+        UIView.animate(withDuration: duration) {
+            self.view.layoutIfNeeded()
+        }
     }
 }
 
@@ -461,18 +431,17 @@ extension UserChatViewController: UITableViewDelegate, UITableViewDataSource {
         headerView.backgroundColor = .clear
         
         let dateLabel = UILabel()
-        dateLabel.font = UIFont.systemFont(ofSize: 14)
-        dateLabel.textColor = .lightGray
+        dateLabel.font = Constants.dateFormatFont
+        dateLabel.textColor = Constants.dateColor
         dateLabel.textAlignment = .center
         
-        // Форматируем дату
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "d MMMM yyyy"
+        dateFormatter.dateFormat = Constants.dateFormat
         dateLabel.text = dateFormatter.string(from: messageGroups[section].date)
         
         headerView.addSubview(dateLabel)
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
         
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             dateLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
             dateLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)

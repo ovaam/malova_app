@@ -94,7 +94,7 @@ class DetailAboutProcedureViewController: UIViewController {
     }
     
     private func setupAddToCartButton() {
-        addToCartButton.tintColor = .blue
+        addToCartButton.tintColor = .darkGray
         addToCartButton.setTitle("Добавить в корзину", for: .normal)
         addToCartButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         

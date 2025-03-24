@@ -8,10 +8,11 @@
 import UIKit
 
 final class CartViewController: UIViewController {
-    private let tableView = UITableView()
+    private let tableView: UITableView = UITableView()
     private let closeButton: UIButton = UIButton(type: .system)
-    private let totalView = UIView()
-    private let totalLabel = UILabel()
+    private let totalView: UIView = UIView()
+    private let totalLabel: UILabel = UILabel()
+    private let emptyMessage: UILabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +21,15 @@ final class CartViewController: UIViewController {
         setupTableView()
         setupCloseButton()
         setupTotalView()
+        setupEmptyMessage()
+        
+        if Cart.shared.procedures.isEmpty {
+            totalView.isHidden = true
+            emptyMessage.isHidden = false
+        } else {
+            totalView.isHidden = false
+            emptyMessage.isHidden = true
+        }
     }
     
     private func setupTableView() {
@@ -76,6 +86,17 @@ final class CartViewController: UIViewController {
         
         totalLabel.pinCenterX(to: totalView.centerXAnchor)
         totalLabel.pinCenterY(to: totalView.centerYAnchor)
+    }
+    
+    private func setupEmptyMessage() {
+        emptyMessage.text = "нет выбранных процедур"
+        emptyMessage.textColor = .lightGray
+        emptyMessage.textAlignment = .center
+        
+        view.addSubview(emptyMessage)
+        
+        emptyMessage.pinCenterY(to: view.centerYAnchor)
+        emptyMessage.pinLeft(to: view.leadingAnchor, 110)
     }
         
     private func calculateTotal() -> Int {

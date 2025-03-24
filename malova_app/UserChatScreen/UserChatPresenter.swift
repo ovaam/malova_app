@@ -8,21 +8,38 @@
 import UIKit
 
 protocol UserChatPresentationLogic {
-    typealias Model = UserChatModel
-    func presentStart(_ response: Model.Start.Response)
-    // func present(_ response: Model..Response)
+    func presentMessages(response: UserChatModel.LoadMessages.Response)
+        func presentMessageSent(response: UserChatModel.SendMessage.Response)
+        func presentChatCreated(response: UserChatModel.CreateChat.Response)
+        func presentError(error: Error)
 }
 
 final class UserChatPresenter: UserChatPresentationLogic {
-    // MARK: - Constants
-    private enum Constants {
-        
-    }
-    
     weak var view: UserChatDisplayLogic?
     
     // MARK: - PresentationLogic
-    func presentStart(_ response: Model.Start.Response) {
-        view?.displayStart(Model.Start.ViewModel())
-    }
+    func presentMessages(response: UserChatModel.LoadMessages.Response) {
+            let groupedMessages = groupMessagesByDate(response.messages)
+            let viewModel = UserChatModel.LoadMessages.ViewModel(messageGroups: groupedMessages)
+            view?.displayMessages(viewModel: viewModel)
+        }
+        
+        func presentMessageSent(response: UserChatModel.SendMessage.Response) {
+            view?.displayMessageSent()
+        }
+        
+        func presentChatCreated(response: UserChatModel.CreateChat.Response) {
+            let viewModel = UserChatModel.CreateChat.ViewModel(chatId: response.chatId)
+            view?.displayChatCreated(viewModel: viewModel)
+        }
+        
+        func presentError(error: Error) {
+            view?.displayError(message: error.localizedDescription)
+        }
+        
+        private func groupMessagesByDate(_ messages: [Message]) -> [MessageGroup] {
+            let grouped = Dictionary(grouping: messages) { Calendar.current.startOfDay(for: $0.timestamp) }
+            return grouped.map { MessageGroup(date: $0.key, messages: $0.value) }
+                .sorted { $0.date < $1.date }
+        }
 }

@@ -7,22 +7,48 @@
 import UIKit
 
 enum UserChatModel {
-    enum Start {
-        struct Request { }
-        struct Response { }
-        struct ViewModel { }
-        struct Info { }
+    struct LoadMessages {
+        struct Request {
+            let chatId: String
+        }
+        struct Response {
+            let messages: [Message]
+        }
+        struct ViewModel {
+            let messageGroups: [MessageGroup]
+        }
     }
     
-    //    enum Other {
-    //        struct Request { }
-    //        struct Response { }
-    //        struct ViewModel { }
-    //        struct Info { }
-    //    }
+    struct SendMessage {
+        struct Request {
+            let chatId: String
+            let text: String
+            let senderId: String
+        }
+        struct Response {}
+        struct ViewModel {}
+    }
+    
+    struct CreateChat {
+        struct Request {
+            let userId: String
+            let adminId: String
+        }
+        struct Response {
+            let chatId: String
+        }
+        struct ViewModel {
+            let chatId: String
+        }
+    }
+    
+    struct Error {
+        struct ViewModel {
+            let message: String
+        }
+    }
 }
 
-// MARK: - Message Model
 struct Message {
     let senderId: String
     let text: String
