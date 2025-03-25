@@ -38,7 +38,8 @@ final class ProfileViewController: UIViewController,
     private let ageLabel: UILabel = UILabel()
     private let genderLabel: UILabel = UILabel()
     private let goBackButton: UIButton = UIButton()
-    private let logoutButton = UIButton(type: .system)
+//    private let logoutButton: UIButton = UIButton(type: .system)
+    private let settingsButton: UIButton = UIButton()
     
     private let questionButton: UIButton = UIButton(type: .system)
     
@@ -73,10 +74,11 @@ final class ProfileViewController: UIViewController,
         setupGoBackButton()
         setupFullNameLabel()
         setupEmailLabel()
-        setupAgeLabel()
         setupGenderLabel()
+        setupAgeLabel()
         setupQuestionButton()
-        setupLogoutButton()
+        //setupLogoutButton()
+        setupSettingsButton()
     }
     
     private func setupGoBackButton() {
@@ -91,18 +93,18 @@ final class ProfileViewController: UIViewController,
         goBackButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
     }
     
-    private func setupLogoutButton() {
-        logoutButton.setTitle("Выйти", for: .normal)
-        logoutButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Medium", size: 18)
-        logoutButton.tintColor = .red
-        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
-        
-        view.addSubview(logoutButton)
-        
-        logoutButton.translatesAutoresizingMaskIntoConstraints = false
-        logoutButton.pinTop(to: genderLabel.bottomAnchor, 40)
-        logoutButton.pinCenterX(to: view.centerXAnchor)
-    }
+//    private func setupLogoutButton() {
+//        logoutButton.setTitle("Выйти", for: .normal)
+//        logoutButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Medium", size: 18)
+//        logoutButton.tintColor = .red
+//        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+//        
+//        view.addSubview(logoutButton)
+//        
+//        logoutButton.translatesAutoresizingMaskIntoConstraints = false
+//        logoutButton.pinTop(to: genderLabel.bottomAnchor, 280)
+//        logoutButton.pinCenterX(to: view.centerXAnchor)
+//    }
     
     private func setupFullNameLabel() {
         fullNameLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 18)
@@ -110,8 +112,8 @@ final class ProfileViewController: UIViewController,
         
         view.addSubview(fullNameLabel)
         
-        fullNameLabel.pinTop(to: view.topAnchor, 300)
-        fullNameLabel.pinLeft(to: view.leadingAnchor, 30)
+        fullNameLabel.pinTop(to: view.topAnchor, 255)
+        fullNameLabel.pinLeft(to: view.leadingAnchor, 110)
         fullNameLabel.pinRight(to: view.trailingAnchor, 30)
     }
     
@@ -121,20 +123,9 @@ final class ProfileViewController: UIViewController,
         
         view.addSubview(emailLabel)
         
-        emailLabel.pinTop(to: fullNameLabel.bottomAnchor, 20)
-        emailLabel.pinLeft(to: view.leadingAnchor, 30)
+        emailLabel.pinTop(to: fullNameLabel.bottomAnchor, 45)
+        emailLabel.pinLeft(to: view.leadingAnchor, 110)
         emailLabel.pinRight(to: view.trailingAnchor, 30)
-    }
-    
-    private func setupAgeLabel() {
-        ageLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 18)
-        ageLabel.textAlignment = .center
-        
-        view.addSubview(ageLabel)
-        
-        ageLabel.pinTop(to: emailLabel.bottomAnchor, 20)
-        ageLabel.pinLeft(to: view.leadingAnchor, 30)
-        ageLabel.pinRight(to: view.trailingAnchor, 30)
     }
     
     private func setupGenderLabel() {
@@ -143,23 +134,46 @@ final class ProfileViewController: UIViewController,
         
         view.addSubview(genderLabel)
         
-        genderLabel.pinTop(to: ageLabel.bottomAnchor, 20)
-        genderLabel.pinLeft(to: view.leadingAnchor, 30)
+        genderLabel.pinTop(to: emailLabel.bottomAnchor, 45)
+        genderLabel.pinLeft(to: view.leadingAnchor, 110)
         genderLabel.pinRight(to: view.trailingAnchor, 30)
+    }
+    
+    private func setupAgeLabel() {
+        ageLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 18)
+        ageLabel.textAlignment = .center
+        
+        view.addSubview(ageLabel)
+        
+        ageLabel.pinTop(to: genderLabel.bottomAnchor, 45)
+        ageLabel.pinLeft(to: view.leadingAnchor, 110)
+        ageLabel.pinRight(to: view.trailingAnchor, 30)
     }
     
     private func setupQuestionButton() {
         questionButton.setImage(UIImage(systemName: "questionmark.circle"), for: .normal)
-        questionButton.tintColor = .black // Цвет иконки
-        questionButton.addTarget(self, action: #selector(openHelpScreen), for: .touchUpInside)
+        questionButton.tintColor = .black
       
         view.addSubview(questionButton)
-        questionButton.translatesAutoresizingMaskIntoConstraints = false
         
         questionButton.pinTop(to: view.safeAreaLayoutGuide.topAnchor, 20)
         questionButton.pinRight(to: view.trailingAnchor, 20)
         questionButton.setWidth(40)
         questionButton.setHeight(40)
+        
+        questionButton.addTarget(self, action: #selector(openHelpScreen), for: .touchUpInside)
+    }
+    
+    private func setupSettingsButton() {
+        settingsButton.setImage(UIImage(systemName: "gearshape"), for: .normal)
+        settingsButton.tintColor = .black
+        
+        view.addSubview(settingsButton)
+        
+        settingsButton.pinCenterX(to: view.centerXAnchor)
+        settingsButton.pinBottom(to: view.bottomAnchor, 180)
+        
+        settingsButton.addTarget(self, action: #selector(openSettingsScreen), for: .touchUpInside)
     }
         
     // MARK: - Load User Data
@@ -170,10 +184,10 @@ final class ProfileViewController: UIViewController,
             if let user = user {
                 print("Данные пользователя загружены: \(user)")
                 DispatchQueue.main.async {
-                    self.fullNameLabel.text = "ФИО: \(user.fullName)"
-                    self.emailLabel.text = "Почта: \(user.email)"
-                    self.ageLabel.text = "Возраст: \(user.age)"
-                    self.genderLabel.text = "Пол: \(user.gender)"
+                    self.fullNameLabel.text = "\(user.fullName)"
+                    self.emailLabel.text = "\(user.email)"
+                    self.genderLabel.text = "\(user.gender)"
+                    self.ageLabel.text = "\(user.age)"
                 }
             } else {
                 print("Данные пользователя не найдены")
@@ -182,8 +196,7 @@ final class ProfileViewController: UIViewController,
     }
     
     // MARK: - Actions
-    @objc
-    private func backButtonTapped() {
+    @objc private func backButtonTapped() {
         router.routeToMain()
     }
     
@@ -191,13 +204,8 @@ final class ProfileViewController: UIViewController,
         
     }
     
-    @objc private func logoutButtonTapped() {
-        do {
-            try Auth.auth().signOut()
-            router.routeToWelcomeScreen()
-        } catch let signOutError as NSError {
-            print("Ошибка при выходе из аккаунта: \(signOutError.localizedDescription)")
-        }
+    @objc private func openSettingsScreen() {
+        router.routeToSettings()
     }
     
     // MARK: - DisplayLogic

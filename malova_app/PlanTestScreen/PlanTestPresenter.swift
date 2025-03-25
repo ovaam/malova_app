@@ -1,25 +1,25 @@
 //
-//  SettingsPresenter.swift
+//  PlanTestPresenter.swift
 //  malova_app
 //
-//  Created by Малова Олеся on 28.02.2025.
+//  Created by Малова Олеся on 25.03.2025.
 //
 
 import UIKit
 
-protocol SettingsPresentationLogic {
-    typealias Model = SettingsModel
+protocol PlanTestPresentationLogic {
+    typealias Model = PlanTestModel
     func presentStart(_ response: Model.Start.Response)
     // func present(_ response: Model..Response)
 }
 
-final class SettingsPresenter: SettingsPresentationLogic {
+final class PlanTestPresenter: PlanTestPresentationLogic {
     // MARK: - Constants
     private enum Constants {
         
     }
     
-    weak var view: SettingsDisplayLogic?
+    weak var view: PlanTestDisplayLogic?
     
     // MARK: - PresentationLogic
     func presentStart(_ response: Model.Start.Response) {

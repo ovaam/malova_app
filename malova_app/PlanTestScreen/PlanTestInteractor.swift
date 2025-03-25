@@ -1,25 +1,25 @@
 //
-//  SettingsInteractor.swift
+//  PlanTestInteractor.swift
 //  malova_app
 //
-//  Created by Малова Олеся on 28.02.2025.
+//  Created by Малова Олеся on 25.03.2025.
 //
 
 import UIKit
 
-protocol SettingsBusinessLogic {
-    typealias Model = SettingsModel
+protocol PlanTestBusinessLogic {
+    typealias Model = PlanTestModel
     func loadStart(_ request: Model.Start.Request)
     // func load(_ request: Model..Request)
 }
 
 
-final class SettingsInteractor: SettingsBusinessLogic {
+final class PlanTestInteractor: PlanTestBusinessLogic {
     // MARK: - Fields
-    private let presenter: SettingsPresentationLogic
+    private let presenter: PlanTestPresentationLogic
     
     // MARK: - Lifecycle
-    init(presenter: SettingsPresentationLogic) {
+    init(presenter: PlanTestPresentationLogic) {
         self.presenter = presenter
     }
     

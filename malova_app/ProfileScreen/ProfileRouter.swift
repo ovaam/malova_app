@@ -18,7 +18,8 @@ final class ProfileRouter: ProfileRoutingLogic {
     weak var view: UIViewController?
     
     func routeToSettings() {
-        
+        let nextVC = SettingsAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     func routeToMain() {

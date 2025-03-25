@@ -35,8 +35,15 @@ final class MainRouter: MainRoutingLogic {
     }
     
     func routeToFaceScan() {
-        //let nextVC = AdminChatListAssembly.build()
-        //view?.navigationController?.pushViewController(nextVC, animated: true)
+//        if PlanTestViewController.isTestCompleted() {
+//            let nextVC = FinalPlanViewController()
+//            view?.navigationController?.pushViewController(nextVC, animated: true)
+//        } else {
+//            let nextVC = PlanTestAssembly.build()
+//            view?.navigationController?.pushViewController(nextVC, animated: true)
+//        }
+        let nextVC = PlanTestAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     func routeToAboutClinic() {

@@ -37,7 +37,6 @@ final class AdminChatViewController: UIViewController, AdminChatDisplayLogic {
         static let cellIdentifier: String = "AdminMessageCell"
         static let messageTextPlaceholder: String = "Введите сообщение..."
         static let sendButtonText: String = "Отправить"
-        //static let adminTitleText: String = "Чат с пользователем"
         
         static let adminTitleFont: UIFont = UIFont(name: "HelveticaNeue-Medium", size: 24) ?? UIFont()
         

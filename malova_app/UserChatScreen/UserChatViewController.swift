@@ -253,7 +253,7 @@ final class UserChatViewController: UIViewController, UserChatDisplayLogic {
         addCartProceduresButton.setTitle(Constants.addCardButtonTitle, for: .normal)
         addCartProceduresButton.backgroundColor = Constants.addCartButtonColor
         addCartProceduresButton.layer.cornerRadius = Constants.addCartButtonCorner
-        addCartProceduresButton.setTitleColor(Constants.adminTitleTextColor, for: .normal)
+        addCartProceduresButton.titleLabel?.textColor = Constants.addCartButtonTextColor
         addCartProceduresButton.titleLabel?.font = Constants.addCartButtonFont
         
         view.addSubview(addCartProceduresButton)

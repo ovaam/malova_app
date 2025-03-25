@@ -30,7 +30,7 @@ final class MainViewController: UIViewController,
         static let image: UIImage = UIImage(named: "MainImage") ?? UIImage()
         static let appointmentTitle: String = "записаться на услугу"
         static let titleButtonColor: UIColor = .black
-        static let scanTitle: String = "отсканировать свое лицо"
+        static let scanTitle: String = "узнай свой план процедур"
         static let procedureTitle: String = "список всех процедур"
         
         static let appointmentButtonTop: Double = 190
