@@ -62,6 +62,8 @@ final class MainViewController: UIViewController,
     private let scanButton: UIButton = UIButton()
     private let procedureButton: UIButton = UIButton()
     private let profileButton: UIButton = UIButton()
+    private let documentsButton: UIButton = UIButton()
+    private let workersButton: UIButton = UIButton()
     
     // MARK: - LifeCycle
     init(
@@ -87,6 +89,8 @@ final class MainViewController: UIViewController,
         setupScanButton()
         setupProcedureButton()
         setupProfileButton()
+        setupDocumentsButton()
+        setupWorkersButton()
     }
     
     // MARK: - Configuration
@@ -154,6 +158,32 @@ final class MainViewController: UIViewController,
         profileButton.layer.masksToBounds = true
     }
     
+    private func setupDocumentsButton() {
+        documentsButton.setTitle("Лицензии", for: .normal)
+        documentsButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        documentsButton.setTitleColor(.systemGray2, for: .normal)
+        documentsButton.backgroundColor = .clear
+        
+        view.addSubview(documentsButton)
+        
+        documentsButton.pinTop(to: procedureButton.bottomAnchor, 30)
+        documentsButton.pinRight(to: view.safeAreaLayoutGuide.trailingAnchor, 30)
+        documentsButton.addTarget(self, action: #selector(openDocumentsClinicWebsite), for: .touchUpInside)
+    }
+    
+    private func setupWorkersButton() {
+        workersButton.setTitle("Работники", for: .normal)
+        workersButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        workersButton.setTitleColor(.systemGray2, for: .normal)
+        workersButton.backgroundColor = .clear
+        
+        view.addSubview(workersButton)
+        
+        workersButton.pinTop(to: documentsButton.bottomAnchor, 10)
+        workersButton.pinRight(to: view.safeAreaLayoutGuide.trailingAnchor, 30)
+        workersButton.addTarget(self, action: #selector(openWorkersClinicWebsite), for: .touchUpInside)
+    }
+    
     // MARK: - Actions
     @objc func appointmentButtonTapped() {
         router.routeToAppointment()
@@ -169,6 +199,18 @@ final class MainViewController: UIViewController,
     
     @objc private func openProfile() {
         router.routeToProfile()
+    }
+    
+    @objc func openDocumentsClinicWebsite() {
+        if let url = URL(string: "https://clinic-malova.ru/liczenzii") {
+            UIApplication.shared.open(url)
+        }
+    }
+    
+    @objc func openWorkersClinicWebsite() {
+        if let url = URL(string: "https://clinic-malova.ru/o-nas") {
+            UIApplication.shared.open(url)
+        }
     }
     
     // MARK: - DisplayLogic

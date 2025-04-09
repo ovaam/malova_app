@@ -122,6 +122,9 @@ final class PlanTestViewController: UIViewController, PlanTestDisplayLogic {
         button.isHidden = true
         return button
     }()
+    
+    private let goBackButton: UIButton = UIButton()
+    
     // MARK: - Fields
     private let router: PlanTestRoutingLogic
     private let interactor: PlanTestBusinessLogic
@@ -144,6 +147,7 @@ final class PlanTestViewController: UIViewController, PlanTestDisplayLogic {
         setupUI()
         setupButtons()
         startTest()
+        setupGoBackButton()
     }
     
     static func isTestCompleted() -> Bool {
@@ -195,6 +199,18 @@ final class PlanTestViewController: UIViewController, PlanTestDisplayLogic {
         noButton.addTarget(self, action: #selector(answerNo), for: .touchUpInside)
         nextTestButton.addTarget(self, action: #selector(startBodyTest), for: .touchUpInside)
         finishButton.addTarget(self, action: #selector(showFinalPlan), for: .touchUpInside)
+    }
+    
+    private func setupGoBackButton() {
+        goBackButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        goBackButton.tintColor = .black
+        
+        view.addSubview(goBackButton)
+        
+        goBackButton.pinTop(to: view.safeAreaLayoutGuide.topAnchor, 16)
+        goBackButton.pinLeft(to: view.leadingAnchor, 16)
+        
+        goBackButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
     }
     
     private func startTest() {
@@ -286,6 +302,10 @@ final class PlanTestViewController: UIViewController, PlanTestDisplayLogic {
         currentTestType = .body
         resetTestUI()
         startTest()
+    }
+    
+    @objc private func backButtonTapped() {
+        router.routeToMain()
     }
     
     @objc private func showFinalPlan() {

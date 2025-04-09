@@ -406,8 +406,6 @@
 				6CDCE5FB2D92D52600191A53 /* PlanTestScreen */,
 				6CDCE52D2D77B20700191A53 /* AdminChatScreen */,
 				6CF419272D527D1100E9FA08 /* UserChatScreen */,
-				6CF4192C2D527D7100E9FA08 /* SertificatesScreen */,
-				6CF4192B2D527D5D00E9FA08 /* AboutClinicScreen */,
 				6CF4192A2D527D4B00E9FA08 /* ProceduresScreen */,
 				6CDCE5462D77B36900191A53 /* AdminChatListScreen */,
 				6CF419262D527D0800E9FA08 /* SettingsScreen */,
@@ -569,20 +567,6 @@
 				6CDCE5F12D920E5800191A53 /* ProceduresWorker.swift */,
 			);
 			path = ProceduresScreen;
-			sourceTree = "<group>";
-		};
-		6CF4192B2D527D5D00E9FA08 /* AboutClinicScreen */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = AboutClinicScreen;
-			sourceTree = "<group>";
-		};
-		6CF4192C2D527D7100E9FA08 /* SertificatesScreen */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = SertificatesScreen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
