@@ -9,6 +9,7 @@ import UIKit
 
 protocol LogInRoutingLogic {
     func routeToMain()
+    func routeToSingIn()
 }
 
 final class LogInRouter: LogInRoutingLogic {
@@ -16,6 +17,11 @@ final class LogInRouter: LogInRoutingLogic {
     
     func routeToMain() {
         let nextVC = MainAssembly.build()
+        view?.navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    func routeToSingIn() {
+        let nextVC = SingInAssembly.build()
         view?.navigationController?.pushViewController(nextVC, animated: true)
     }
 }

@@ -77,7 +77,6 @@ final class ProfileViewController: UIViewController,
         setupGenderLabel()
         setupAgeLabel()
         setupQuestionButton()
-        //setupLogoutButton()
         setupSettingsButton()
     }
     

@@ -92,6 +92,7 @@ final class LogInViewController: UIViewController, LogInDisplayLogic {
     private let repeatedPasswordLabel: UILabel = UILabel()
     
     private let loginButton: UIButton = UIButton()
+    private let goBackButton: UIButton = UIButton()
     
     // MARK: - LifeCycle
     init(
@@ -120,6 +121,7 @@ final class LogInViewController: UIViewController, LogInDisplayLogic {
         setupPassword()
         setupRepeatedPassword()
         setupButton()
+        setupGoBackButton()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(tapGesture)
@@ -257,6 +259,18 @@ final class LogInViewController: UIViewController, LogInDisplayLogic {
         loginButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
     
+    private func setupGoBackButton() {
+        goBackButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        goBackButton.tintColor = .white
+        
+        view.addSubview(goBackButton)
+        
+        goBackButton.pinTop(to: view.safeAreaLayoutGuide.topAnchor, 16)
+        goBackButton.pinLeft(to: view.leadingAnchor, 16)
+        
+        goBackButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+    }
+    
     // MARK: - Actions
     @objc private func buttonTapped() {
         guard let email = emailTextField.text, !email.isEmpty,
@@ -287,6 +301,10 @@ final class LogInViewController: UIViewController, LogInDisplayLogic {
     
     @objc private func hideKeyboard() {
         view.endEditing(true)
+    }
+    
+    @objc private func backButtonTapped() {
+        router.routeToSingIn()
     }
     
     // MARK: - DisplayLogic
