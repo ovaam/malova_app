@@ -34,7 +34,7 @@ final class PlanTestViewController: UIViewController, PlanTestDisplayLogic {
         let control = UISegmentedControl(items: ["Тест для лица", "Тест для тела"])
         control.selectedSegmentIndex = 0
         control.addTarget(PlanTestViewController.self, action: #selector(testTypeChanged), for: .valueChanged)
-        control.isHidden = true // Скрываем до завершения тестов
+        control.isHidden = true
         return control
     }()
     
@@ -214,7 +214,6 @@ final class PlanTestViewController: UIViewController, PlanTestDisplayLogic {
     }
     
     private func startTest() {
-        recommendedProcedures.removeAll()
         updateQuestion()
     }
     
@@ -250,33 +249,51 @@ final class PlanTestViewController: UIViewController, PlanTestDisplayLogic {
         
         resultsTextView.isHidden = false
         
-        var resultText = "Рекомендуемые процедуры для \(currentTestType == .face ? "лица" : "тела"):\n\n"
+        var resultText = "Рекомендуемые процедуры:\n\n"
         
-        var procedures = currentTestType == .face ?
-        faceAnswers.flatMap { $0.key.proceduresForAnswer($0.value) } :
-        bodyAnswers.flatMap { $0.key.proceduresForAnswer($0.value) }
+        // Получаем процедуры для лица
+        var faceProcedures = faceAnswers.flatMap { $0.key.proceduresForAnswer($0.value) }
+        
+        faceProcedures = Array(Set(faceProcedures))
+        
+        // Получаем процедуры для тела (если тест пройден)
+        var bodyProcedures = bodyAnswers.isEmpty ? [] : bodyAnswers.flatMap { $0.key.proceduresForAnswer($0.value) }
+        
+        bodyProcedures = Array(Set(bodyProcedures))
+        
+        // Объединяем все процедуры
+        var allProcedures = faceProcedures + bodyProcedures
         
         // Удаляем дубликаты
-        procedures = Array(Set(procedures))
+        allProcedures = Array(Set(allProcedures))
         
-        if procedures.isEmpty {
+        if allProcedures.isEmpty {
             resultText += "Уходовые процедуры"
         } else {
-            resultText += procedures.map { "• \($0)" }.joined(separator: "\n")
+            // Группируем процедуры по категориям
+            if !faceProcedures.isEmpty {
+                resultText += "Для лица:\n"
+                resultText += faceProcedures.map { "• \($0)" }.joined(separator: "\n")
+                resultText += "\n\n"
+            }
+            
+            if !bodyProcedures.isEmpty {
+                resultText += "Для тела:\n"
+                resultText += bodyProcedures.map { "• \($0)" }.joined(separator: "\n")
+            }
         }
         
-        recommendedProcedures.append(contentsOf: procedures)
+        allProcedures = Array(Set(allProcedures))
+        
+        recommendedProcedures = allProcedures
         resultsTextView.text = resultText
         
-        // Показываем соответствующие кнопки
-        if currentTestType == .face && bodyAnswers.isEmpty {
-            nextTestButton.isHidden = false
-            finishButton.isHidden = false
-            finishButton.setTitle("Пропустить тест для тела", for: .normal)
-        } else {
-            finishButton.isHidden = false
-            finishButton.setTitle("Завершить", for: .normal)
-        }
+        // Всегда показываем кнопку завершения
+        finishButton.isHidden = false
+        finishButton.setTitle("Завершить", for: .normal)
+        
+        // Показываем кнопку теста для тела только если он еще не пройден
+        nextTestButton.isHidden = !bodyAnswers.isEmpty
     }
     
     private func saveTestCompletion() {

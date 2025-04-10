@@ -134,9 +134,6 @@
 		6CDCE6052D92D5D800191A53 /* PlanTestRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDCE6042D92D5D800191A53 /* PlanTestRouter.swift */; };
 		6CDCE6072D92D5E700191A53 /* PlanTestAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDCE6062D92D5E700191A53 /* PlanTestAssembly.swift */; };
 		6CDCE6092D92DC9C00191A53 /* FinalPlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDCE6082D92DC9C00191A53 /* FinalPlanViewController.swift */; };
-		6CDCE65A2DA4607000191A53 /* FaceProceduresViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDCE6592DA4607000191A53 /* FaceProceduresViewController.swift */; };
-		6CDCE65C2DA4612C00191A53 /* FaceProceduresListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDCE65B2DA4612C00191A53 /* FaceProceduresListViewController.swift */; };
-		6CDCE65E2DA461C200191A53 /* FaceProcedure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDCE65D2DA461C200191A53 /* FaceProcedure.swift */; };
 		6CF418872D51BF6F00E9FA08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF418862D51BF6F00E9FA08 /* AppDelegate.swift */; };
 		6CF418892D51BF6F00E9FA08 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF418882D51BF6F00E9FA08 /* SceneDelegate.swift */; };
 		6CF418902D51BF7100E9FA08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CF4188F2D51BF7100E9FA08 /* Assets.xcassets */; };
@@ -243,9 +240,6 @@
 		6CDCE6042D92D5D800191A53 /* PlanTestRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanTestRouter.swift; sourceTree = "<group>"; };
 		6CDCE6062D92D5E700191A53 /* PlanTestAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanTestAssembly.swift; sourceTree = "<group>"; };
 		6CDCE6082D92DC9C00191A53 /* FinalPlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalPlanViewController.swift; sourceTree = "<group>"; };
-		6CDCE6592DA4607000191A53 /* FaceProceduresViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceProceduresViewController.swift; sourceTree = "<group>"; };
-		6CDCE65B2DA4612C00191A53 /* FaceProceduresListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceProceduresListViewController.swift; sourceTree = "<group>"; };
-		6CDCE65D2DA461C200191A53 /* FaceProcedure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceProcedure.swift; sourceTree = "<group>"; };
 		6CF418832D51BF6F00E9FA08 /* malova_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = malova_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CF418862D51BF6F00E9FA08 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6CF418882D51BF6F00E9FA08 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -356,7 +350,6 @@
 		6CDCE5FB2D92D52600191A53 /* PlanTestScreen */ = {
 			isa = PBXGroup;
 			children = (
-				6CDCE6582DA4605600191A53 /* FaceProceduresScreen */,
 				6CDCE5FC2D92D56100191A53 /* PlanTestViewController.swift */,
 				6CDCE5FE2D92D56F00191A53 /* PlanTestPresenter.swift */,
 				6CDCE6002D92D58000191A53 /* PlanTestInteractor.swift */,
@@ -366,16 +359,6 @@
 				6CDCE6082D92DC9C00191A53 /* FinalPlanViewController.swift */,
 			);
 			path = PlanTestScreen;
-			sourceTree = "<group>";
-		};
-		6CDCE6582DA4605600191A53 /* FaceProceduresScreen */ = {
-			isa = PBXGroup;
-			children = (
-				6CDCE6592DA4607000191A53 /* FaceProceduresViewController.swift */,
-				6CDCE65B2DA4612C00191A53 /* FaceProceduresListViewController.swift */,
-				6CDCE65D2DA461C200191A53 /* FaceProcedure.swift */,
-			);
-			path = FaceProceduresScreen;
 			sourceTree = "<group>";
 		};
 		6CF4187A2D51BF6F00E9FA08 = {
@@ -752,7 +735,6 @@
 				6CDCE55C2D77B49B00191A53 /* AdminChatListAssembly.swift in Sources */,
 				6CF419022D51C24700E9FA08 /* WelcomeInteractor.swift in Sources */,
 				6CDCE5432D77B2B400191A53 /* AdminChatAssembly.swift in Sources */,
-				6CDCE65A2DA4607000191A53 /* FaceProceduresViewController.swift in Sources */,
 				6CF419162D51C3E600E9FA08 /* LogInViewController.swift in Sources */,
 				6C3305632D712BC6009D0098 /* SettingsRouter.swift in Sources */,
 				6CF419062D51C2A600E9FA08 /* WelcomeRouter.swift in Sources */,
@@ -791,8 +773,6 @@
 				6CF418872D51BF6F00E9FA08 /* AppDelegate.swift in Sources */,
 				6CF419002D51C22000E9FA08 /* BackgroundPhoto.swift in Sources */,
 				6CDCE53B2D77B28600191A53 /* AdminChatModel.swift in Sources */,
-				6CDCE65E2DA461C200191A53 /* FaceProcedure.swift in Sources */,
-				6CDCE65C2DA4612C00191A53 /* FaceProceduresListViewController.swift in Sources */,
 				6C33055F2D712B9E009D0098 /* SettingsInteractor.swift in Sources */,
 				6CDCE5542D77B3F300191A53 /* AdminChatListModel.swift in Sources */,
 				6CDCE5182D77A3A400191A53 /* UserChatViewController.swift in Sources */,
