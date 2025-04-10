@@ -356,6 +356,7 @@
 		6CDCE5FB2D92D52600191A53 /* PlanTestScreen */ = {
 			isa = PBXGroup;
 			children = (
+				6CDCE6582DA4605600191A53 /* FaceProceduresScreen */,
 				6CDCE5FC2D92D56100191A53 /* PlanTestViewController.swift */,
 				6CDCE5FE2D92D56F00191A53 /* PlanTestPresenter.swift */,
 				6CDCE6002D92D58000191A53 /* PlanTestInteractor.swift */,
@@ -402,7 +403,6 @@
 		6CF418852D51BF6F00E9FA08 /* malova_app */ = {
 			isa = PBXGroup;
 			children = (
-				6CDCE6582DA4605600191A53 /* FaceProceduresScreen */,
 				6CDCE5FB2D92D52600191A53 /* PlanTestScreen */,
 				6CDCE52D2D77B20700191A53 /* AdminChatScreen */,
 				6CF419272D527D1100E9FA08 /* UserChatScreen */,

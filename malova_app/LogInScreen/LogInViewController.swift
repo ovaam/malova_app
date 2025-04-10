@@ -290,7 +290,7 @@ final class LogInViewController: UIViewController, LogInDisplayLogic {
         
         let gender = genderSwitcher.selectedSegmentIndex == 0 ? Constants.femaleGenderText : Constants.maleGenderText
         
-        registerUser(phoneNumber: email, password: password, fullName: fullName, gender: gender, age: age) { success, errorMessage in
+        registerUser(email: email, password: password, fullName: fullName, gender: gender, age: age) { success, errorMessage in
             if success {
                 self.router.routeToMain()
             } else {
@@ -313,8 +313,8 @@ final class LogInViewController: UIViewController, LogInDisplayLogic {
     }
     
     // MARK: - Private Methods
-    private func registerUser(phoneNumber: String, password: String, fullName: String, gender: String, age: Int, completion: @escaping (Bool, String?) -> Void) {
-        Auth.auth().createUser(withEmail: phoneNumber, password: password) { authResult, error in
+    private func registerUser(email: String, password: String, fullName: String, gender: String, age: Int, completion: @escaping (Bool, String?) -> Void) {
+        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if let error = error {
                 completion(false, error.localizedDescription)
                 return
@@ -328,7 +328,7 @@ final class LogInViewController: UIViewController, LogInDisplayLogic {
             
             let db = Firestore.firestore()
             let userData: [String: Any] = [
-                "phoneNumber": phoneNumber,
+                "email": email,
                 "fullName": fullName,
                 "gender": gender,
                 "age": age

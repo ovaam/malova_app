@@ -145,7 +145,7 @@ final class AdminChatListViewController: UIViewController, AdminChatListDisplayL
             
             for document in documents {
                 let chatId = document.documentID
-                let userId = chatId.components(separatedBy: "_").first ?? "" // Извлекаем userId из chatId
+                let userId = chatId.components(separatedBy: "_").first ?? ""
                 
                 dispatchGroup.enter()
                 

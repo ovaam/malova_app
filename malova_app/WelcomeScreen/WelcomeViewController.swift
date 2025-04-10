@@ -30,7 +30,7 @@ class WelcomeViewController: UIViewController, WelcomeDisplayLogic, UIGestureRec
         static let clinicLabelColor: UIColor = .white
         static let clinicLabelBottom: Double = -25
         
-        static let startButtonText: String = "start"
+        static let startButtonText: String = "начать"
         static let startButtonColor: UIColor = .white
         static let startButtonFont: String = "TimesNewRomanPSMT"
         static let startButtonFontSize: CGFloat = 28
@@ -129,6 +129,8 @@ class WelcomeViewController: UIViewController, WelcomeDisplayLogic, UIGestureRec
                     
             // Проверяем, является ли пользователь администратором
             if userEmail == "ovaam231323@mail.ru" {
+                router?.routeToAdminChatList()
+            } else  if  userEmail == "Ovaam231323@mail.ru"{
                 router?.routeToAdminChatList()
             } else {
                 router?.routeToMain()
